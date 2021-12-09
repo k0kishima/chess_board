@@ -2,7 +2,7 @@ import { Queen } from '../Queen';
 import { Position } from '../Position';
 
 describe('Queen', () => {
-  describe('.movablePositionsFrom', () => {
+  describe('#movablePositionsFrom', () => {
     const whiteQueen = new Queen('White');
     const blackQueen = new Queen('Black');
 

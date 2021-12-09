@@ -2,7 +2,7 @@ import { Bishop } from '../Bishop';
 import { Position } from '../Position';
 
 describe('Bishop', () => {
-  describe('.movablePositionsFrom', () => {
+  describe('#movablePositionsFrom', () => {
     const whiteBishop = new Bishop('White');
     const blackBishop = new Bishop('Black');
 
