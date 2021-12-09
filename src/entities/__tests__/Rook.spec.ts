@@ -2,7 +2,7 @@ import { Rook } from '../Rook';
 import { Position } from '../Position';
 
 describe('Rook', () => {
-  describe('.movablePositionsFrom', () => {
+  describe('#movablePositionsFrom', () => {
     const whiteRook = new Rook('White');
     const blackRook = new Rook('Black');
 

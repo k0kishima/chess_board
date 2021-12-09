@@ -2,7 +2,7 @@ import { CannotRankupAnyMore, InvalidPositionError, Pawn } from '../Pawn';
 import { Position } from '../Position';
 
 describe('Pawn', () => {
-  describe('.movablePositionsFrom', () => {
+  describe('#movablePositionsFrom', () => {
     describe('of white color', () => {
       const whitePawn = new Pawn('White');
 
@@ -72,7 +72,7 @@ describe('Pawn', () => {
     });
   });
 
-  describe('.attackablePositionsFrom', () => {
+  describe('#attackablePositionsFrom', () => {
     describe('of white color', () => {
       const whitePawn = new Pawn('White');
 
@@ -148,7 +148,7 @@ describe('Pawn', () => {
     });
   });
 
-  describe('.nextRank', () => {
+  describe('#nextRank', () => {
     describe('of white color', () => {
       const whitePawn = new Pawn('White');
 
