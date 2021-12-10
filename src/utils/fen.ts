@@ -1,5 +1,16 @@
-import { Bishop, King, Knight, Pawn, Piece, Queen, Rook } from '@/entities';
 import {
+  Bishop,
+  King,
+  Knight,
+  Pawn,
+  Position,
+  Piece,
+  Queen,
+  Rook,
+} from '@/entities';
+import {
+  ALL_FILES,
+  ALL_RANKS,
   ALL_WHITE_PIECE_SYMBOLS_OF_FEN,
   Color,
   PieceSymbolOfFEN,
@@ -39,4 +50,37 @@ export const createPieceFromSymbol = (pieceSymbol: PieceSymbolOfFEN): Piece => {
     case 'r':
       return new Rook(color);
   }
+};
+
+export const parsePiecePlacement = (fen: string): [Position, Piece][] => {
+  const [piecePlacement] = fen.split(' ');
+  const ranks = piecePlacement.split('/');
+  if (ranks.length !== 8) {
+    throw new Error('Probably given string is not valid FEN format');
+  }
+
+  let positionAndPieces: [Position, Piece][] = [];
+  ranks.forEach((rank: string, rankOffset: number) => {
+    if (!rank.match(/^[BbKkNnPpQqRr1-8]{1,8}$/)) {
+      throw new Error('Probably given string is not valid FEN format');
+    }
+
+    let fileOffset = 0;
+    rank.split('').forEach((symbol: string) => {
+      if (isNaN(parseInt(symbol))) {
+        positionAndPieces = [
+          ...positionAndPieces,
+          [
+            new Position(ALL_FILES[fileOffset], ALL_RANKS[rankOffset]),
+            createPieceFromSymbol(symbol as PieceSymbolOfFEN),
+          ],
+        ];
+        fileOffset += 1;
+      } else {
+        fileOffset += parseInt(symbol);
+      }
+    });
+  });
+
+  return positionAndPieces;
 };
