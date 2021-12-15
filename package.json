@@ -6,20 +6,31 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --write --ignore-path .gitignore \"src/**/*.{ts,tsx,js,jsx,json,css,scss}\""
+    "format": "prettier --write --ignore-path .gitignore \"src/**/*.{ts,tsx,js,jsx,json,css,scss}\"",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "next": "12.0.4",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "react-svg": "^14.1.4"
   },
   "devDependencies": {
+    "@babel/core": "^7.16.0",
+    "@storybook/addon-actions": "^6.4.9",
+    "@storybook/addon-essentials": "^6.4.9",
+    "@storybook/addon-links": "^6.4.9",
+    "@storybook/cli": "^6.4.9",
+    "@storybook/preset-typescript": "^3.0.0",
+    "@storybook/react": "^6.4.9",
     "@testing-library/react": "^12.1.2",
     "@testing-library/react-hooks": "^7.0.2",
     "@types/jest": "^27.0.3",
     "@types/node": "16.11.10",
     "@types/react": "17.0.37",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
+    "babel-loader": "^8.2.3",
     "eslint": "7",
     "eslint-config-next": "12.0.4",
     "eslint-config-prettier": "8.3.0",
@@ -27,6 +38,7 @@
     "jest-fetch-mock": "^3.0.3",
     "prettier": "2.5.0",
     "ts-jest": "^27.0.7",
+    "tsconfig-paths-webpack-plugin": "^3.5.2",
     "typescript": "4.5.2"
   }
 }
