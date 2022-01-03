@@ -1,5 +1,10 @@
-import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
-import rootReducer from "./rootReducer";
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import {
+  useSelector as rawUseSelector,
+  TypedUseSelectorHook,
+} from 'react-redux';
+
+import rootReducer from './rootReducer';
 
 export const store = configureStore({
   reducer: rootReducer,
@@ -10,3 +15,4 @@ export const store = configureStore({
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
+export const useSelector: TypedUseSelectorHook<RootState> = rawUseSelector;

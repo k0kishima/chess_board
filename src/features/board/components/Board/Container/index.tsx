@@ -1,13 +1,20 @@
 import { useState, useEffect } from 'react';
+
+import { RootState, useSelector } from '@/stores/store';
 import { createSquaresProps } from '@/utils/squares';
 import { Square } from '@/components/Square';
 import { Presentation } from '../Presentation';
 
-const FRAME_HEX_COLOR = '#000';
-const WHITE_SQUARE_HEX_COLOR = '#fff';
-const BLACK_SQUARE_HEX_COLOR = '#111';
+const selector = ({ board }: RootState) => ({
+  frameHexColor: board.frameHexColor,
+  whiteSquareHexColor: board.whiteSquareHexColor,
+  blackSquareHexColor: board.blackSquareHexColor,
+});
 
 export const Container: React.VFC = () => {
+  const { frameHexColor, whiteSquareHexColor, blackSquareHexColor } =
+    useSelector(selector);
+
   const [height, setHeight] = useState<number>(0);
   const [width, setWidth] = useState<number>(0);
 
@@ -20,12 +27,12 @@ export const Container: React.VFC = () => {
     const BOARD_VW = height / width > 1 ? 90 : 48;
 
     return (
-      <Presentation frameHexColor={FRAME_HEX_COLOR} boardVw={BOARD_VW}>
+      <Presentation frameHexColor={frameHexColor} boardVw={BOARD_VW}>
         {createSquaresProps(
           BOARD_VW,
           8,
-          WHITE_SQUARE_HEX_COLOR,
-          BLACK_SQUARE_HEX_COLOR
+          whiteSquareHexColor,
+          blackSquareHexColor
         ).map((props, i) => {
           return <Square {...props} key={i} />;
         })}
