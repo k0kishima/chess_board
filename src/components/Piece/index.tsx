@@ -37,5 +37,5 @@ const images: {
 };
 
 export const Piece: React.VFC<Props> = ({ symbol }: Props) => {
-  return <ReactSVG src={images[symbol]} />;
+  return <img src={images[symbol]} />;
 };
