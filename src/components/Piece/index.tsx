@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReactSVG } from 'react-svg';
+import Image from 'next/image';
 
 import { PieceSymbolOfFEN } from '@/types';
 import BlackBishop from '@/assets/images/pieces/black/bishop.svg';
@@ -37,5 +37,12 @@ const images: {
 };
 
 export const Piece: React.VFC<Props> = ({ symbol }: Props) => {
-  return <img src={images[symbol]} />;
+  return (
+    <Image
+      src={images[symbol]}
+      alt={symbol}
+      layout='responsive'
+      objectFit='contain'
+    />
+  );
 };
