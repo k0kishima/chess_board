@@ -5,7 +5,7 @@ import { Position } from './Position';
 // NOTE:
 // 本当はPositionかFileとRankのタプルをキーとしたPieceの配列でフラットに保持したいが、
 // インデックスシグネチャのキーの型は文字列か数値に限定されるので代替案として以下の定義を採用
-type Pieces = { [k in File]?: { [k in Rank]?: Piece | null | undefined } };
+type Pieces = { [k in File]: { [k in Rank]: Piece | null } };
 
 export class Board {
   pieces: Pieces;

@@ -87,14 +87,3 @@ export const parsePiecePlacement = (fen: string): [Position, Piece][] => {
 
   return positionAndPieces;
 };
-
-// TODO: テスト書く
-export const createPiecesIndexedByPositionString = (fen: string) => {
-  const positionPieceTuples = parsePiecePlacement(fen);
-  return Object.fromEntries(
-    positionPieceTuples.map((tuple) => {
-      const [position, piece] = tuple;
-      return [`${position.file}${position.rank}`, piece];
-    })
-  );
-};

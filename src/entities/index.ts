@@ -1,3 +1,4 @@
+export { Board } from './Board';
 export { Bishop } from './Bishop';
 export { King } from './King';
 export { Knight } from './Knight';
