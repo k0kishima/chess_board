@@ -4,12 +4,14 @@ export type State = {
   frameHexColor: string;
   whiteSquareHexColor: string;
   blackSquareHexColor: string;
+  history: string[];
 };
 
 export const initialState: State = {
-  frameHexColor: '#000',
-  whiteSquareHexColor: '#fff',
-  blackSquareHexColor: '#111',
+  frameHexColor: '#333',
+  whiteSquareHexColor: '#eee',
+  blackSquareHexColor: '#555',
+  history: ['rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'],
 };
 
 export const boardSlice = createSlice({

@@ -15,4 +15,8 @@ export class Knight extends Piece {
   attackablePositionsFrom(currentPosition: Position): Position[] {
     return this.movablePositionsFrom(currentPosition);
   }
+
+  toSymbol() {
+    return this.color == 'White' ? 'N' : 'n';
+  }
 }
