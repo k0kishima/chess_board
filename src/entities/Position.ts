@@ -36,4 +36,8 @@ export class Position {
       file: Math.abs(other.file.charCodeAt(0) - this.file.charCodeAt(0)),
     };
   }
+
+  toString() {
+    return `${this.file}${this.rank}`;
+  }
 }
