@@ -55,6 +55,9 @@ export const createPieceFromSymbol = (pieceSymbol: PieceSymbolOfFEN): Piece => {
 export const parsePiecePlacement = (fen: string): [Position, Piece][] => {
   const [piecePlacement] = fen.split(' ');
   const ranks = piecePlacement.split('/');
+  const allFiles = [...ALL_FILES];
+  const reversedAllRanks = [...ALL_RANKS].reverse();
+
   if (ranks.length !== 8) {
     throw new Error('Probably given string is not valid FEN format');
   }
@@ -71,7 +74,7 @@ export const parsePiecePlacement = (fen: string): [Position, Piece][] => {
         positionAndPieces = [
           ...positionAndPieces,
           [
-            new Position(ALL_FILES[fileOffset], ALL_RANKS[rankOffset]),
+            new Position(allFiles[fileOffset], reversedAllRanks[rankOffset]),
             createPieceFromSymbol(symbol as PieceSymbolOfFEN),
           ],
         ];
