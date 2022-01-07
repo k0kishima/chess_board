@@ -1,5 +1,7 @@
 import React from 'react';
 import { Meta } from '@storybook/react/types-7-0';
+
+import { createSquaresProps } from '@/utils/squares';
 import { Board } from '.';
 import { Square } from '../Square';
 
@@ -8,23 +10,8 @@ export default {
   component: Board,
 } as Meta;
 
-const createSquaresProps = (boardVw: number, quantityPerRow: number) => {
-  const whiteSquareHexColor = '#fff';
-  const blackSquareHexColor = '#111';
-  const squareSize = boardVw / quantityPerRow;
-
-  return [...Array<undefined>(quantityPerRow)]
-    .map((_, x) => {
-      return [...Array<undefined>(quantityPerRow)].map((_, y) => {
-        return {
-          hexColorCode:
-            (x + y) % 2 === 1 ? blackSquareHexColor : whiteSquareHexColor,
-          sideLengthByViewPort: squareSize,
-        };
-      });
-    })
-    .flat();
-};
+const WHITE_SQUARE_HEX_COLOR = '#fff';
+const BLACK_SQUARE_HEX_COLOR = '#111';
 
 export const EmptyBoard: React.VFC = () => {
   return <Board boardVw={50} frameHexColor='#000' />;
@@ -33,7 +20,12 @@ export const EmptyBoard: React.VFC = () => {
 export const Size2x2: React.VFC = () => {
   return (
     <Board boardVw={50} frameHexColor='#000'>
-      {createSquaresProps(50, 2).map((props, i) => {
+      {createSquaresProps(
+        50,
+        2,
+        WHITE_SQUARE_HEX_COLOR,
+        BLACK_SQUARE_HEX_COLOR
+      ).map((props, i) => {
         return <Square {...props} key={i} />;
       })}
     </Board>
@@ -43,7 +35,12 @@ export const Size2x2: React.VFC = () => {
 export const Size4x4: React.VFC = () => {
   return (
     <Board boardVw={50} frameHexColor='#000'>
-      {createSquaresProps(50, 4).map((props, i) => {
+      {createSquaresProps(
+        50,
+        4,
+        WHITE_SQUARE_HEX_COLOR,
+        BLACK_SQUARE_HEX_COLOR
+      ).map((props, i) => {
         return <Square {...props} key={i} />;
       })}
     </Board>
@@ -53,7 +50,12 @@ export const Size4x4: React.VFC = () => {
 export const Size8x8: React.VFC = () => {
   return (
     <Board boardVw={50} frameHexColor='#000'>
-      {createSquaresProps(50, 8).map((props, i) => {
+      {createSquaresProps(
+        50,
+        8,
+        WHITE_SQUARE_HEX_COLOR,
+        BLACK_SQUARE_HEX_COLOR
+      ).map((props, i) => {
         return <Square {...props} key={i} />;
       })}
     </Board>

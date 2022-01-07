@@ -1,11 +1,8 @@
 import type { NextPage } from 'next';
+import { BoardContainer } from '@/features/board';
 
 const Home: NextPage = () => {
-  return (
-    <div>
-      <h1>My create-next-app example</h1>
-    </div>
-  );
+  return <BoardContainer />;
 };
 
 export default Home;

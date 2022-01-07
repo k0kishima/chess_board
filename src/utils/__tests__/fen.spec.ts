@@ -24,9 +24,9 @@ describe('FEN utils', () => {
     describe('parse to valid format FEN', () => {
       it('should returns tuples of position and piece', () => {
         expect(parsePiecePlacement('8/8/8/2k5/4K3/5P2/8/8')).toEqual([
-          [new Position('c', 4), new King('Black')],
-          [new Position('e', 5), new King('White')],
-          [new Position('f', 6), new Pawn('White')],
+          [new Position('c', 5), new King('Black')],
+          [new Position('e', 4), new King('White')],
+          [new Position('f', 3), new Pawn('White')],
         ]);
       });
     });

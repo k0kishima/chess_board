@@ -51,4 +51,8 @@ export class Pawn extends Piece {
     }
     return nextRank as Rank;
   }
+
+  toSymbol() {
+    return this.color == 'White' ? 'P' : 'p';
+  }
 }
