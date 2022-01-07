@@ -1,24 +1,21 @@
 import { useState, useEffect } from 'react';
 
 import { RootState, useSelector } from '@/stores/store';
-import { createPiecesIndexedByPositionString } from '@/utils/fen';
-import {
-  createSquaresProps,
-  createPositionStringsIndexedByFlatSquaresArrayIndex,
-} from '@/utils/squares';
+import { createSquaresProps } from '@/utils/squares';
 import { Square } from '@/components/Square';
 import { Piece } from '@/components/Piece';
 import { Presentation } from '../Presentation';
+import { Position } from '@/entities';
 
 const selector = ({ board }: RootState) => ({
   frameHexColor: board.frameHexColor,
   whiteSquareHexColor: board.whiteSquareHexColor,
   blackSquareHexColor: board.blackSquareHexColor,
-  history: board.history,
+  pieces: board.pieces,
 });
 
 export const Container: React.VFC = () => {
-  const { frameHexColor, whiteSquareHexColor, blackSquareHexColor, history } =
+  const { frameHexColor, whiteSquareHexColor, blackSquareHexColor, pieces } =
     useSelector(selector);
 
   const [height, setHeight] = useState<number>(0);
@@ -29,13 +26,11 @@ export const Container: React.VFC = () => {
     setWidth(window.innerWidth);
   }, []);
 
-  const pieces = createPiecesIndexedByPositionString(history.slice(-1)[0]);
-  const positionStrings = createPositionStringsIndexedByFlatSquaresArrayIndex();
-  console.log(positionStrings);
-
   if (height && width) {
     const BOARD_VW = height / width > 1 ? 90 : 48;
     const QUANTITY_PER_ROW = 8;
+
+    const positions = Position.all().sort((a, b) => b.rank - a.rank);
 
     return (
       <Presentation frameHexColor={frameHexColor} boardVw={BOARD_VW}>
@@ -45,8 +40,8 @@ export const Container: React.VFC = () => {
           whiteSquareHexColor,
           blackSquareHexColor
         ).map((props, i) => {
-          const positionString = positionStrings[i];
-          const piece = pieces[positionString];
+          const position = positions[i];
+          const piece = pieces[position.file][position.rank];
 
           if (!piece) {
             return <Square {...props} key={i} />;
