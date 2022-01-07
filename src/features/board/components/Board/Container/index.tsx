@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 
-import { ALL_FILES, ALL_RANKS } from '@/types';
 import { RootState, useSelector } from '@/stores/store';
-import { parsePiecePlacement } from '@/utils/fen';
-import { createSquaresProps } from '@/utils/squares';
+import { createPiecesIndexedByPositionString } from '@/utils/fen';
+import {
+  createSquaresProps,
+  createPositionStringsIndexedByFlatSquaresArrayIndex,
+} from '@/utils/squares';
 import { Square } from '@/components/Square';
 import { Piece } from '@/components/Piece';
 import { Presentation } from '../Presentation';
@@ -13,13 +15,6 @@ const selector = ({ board }: RootState) => ({
   whiteSquareHexColor: board.whiteSquareHexColor,
   blackSquareHexColor: board.blackSquareHexColor,
   history: board.history,
-});
-
-const positionStrings: string[] = [];
-[...ALL_RANKS].reverse().forEach((rank) => {
-  [...ALL_FILES].forEach((file) => {
-    positionStrings.push(`${file}${rank}`);
-  });
 });
 
 export const Container: React.VFC = () => {
@@ -35,6 +30,8 @@ export const Container: React.VFC = () => {
   }, []);
 
   const pieces = createPiecesIndexedByPositionString(history.slice(-1)[0]);
+  const positionStrings = createPositionStringsIndexedByFlatSquaresArrayIndex();
+  console.log(positionStrings);
 
   if (height && width) {
     const BOARD_VW = height / width > 1 ? 90 : 48;
@@ -66,14 +63,4 @@ export const Container: React.VFC = () => {
   } else {
     return <></>;
   }
-};
-
-const createPiecesIndexedByPositionString = (fen: string) => {
-  const positionPieceTuples = parsePiecePlacement(fen);
-  return Object.fromEntries(
-    positionPieceTuples.map((tuple) => {
-      const [position, piece] = tuple;
-      return [`${position.file}${position.rank}`, piece];
-    })
-  );
 };
