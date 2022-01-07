@@ -1,4 +1,4 @@
-import { File, Rank } from '@/types';
+import { File, Rank, ALL_FILES, ALL_RANKS } from '@/types';
 import { Piece } from './Piece';
 import { Position } from './Position';
 
@@ -32,5 +32,38 @@ export class Board {
       );
     }
     column[position.rank] = piece;
+  }
+
+  toFEN() {
+    const reversedAllRanks = [...ALL_RANKS].reverse();
+    const allFiles = [...ALL_FILES];
+
+    return reversedAllRanks
+      .map((rank: Rank) => {
+        const piecesOfRanks = allFiles.map((file: File) => {
+          return this.pieces[file][rank];
+        });
+
+        const chars: (string | number)[] = [];
+        let blank = 0;
+        piecesOfRanks.map((piece) => {
+          if (piece) {
+            if (blank > 0) {
+              chars.push(blank);
+              blank = 0;
+            }
+            chars.push(piece.toSymbol());
+          } else {
+            blank++;
+          }
+        });
+
+        if (blank > 0) {
+          chars.push(blank);
+        }
+
+        return chars.join('');
+      })
+      .join('/');
   }
 }
