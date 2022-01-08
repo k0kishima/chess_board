@@ -12,6 +12,7 @@ export type State = {
   history: string[];
   historyOffset: number;
   pieces: { [k in File]: { [k in Rank]: Piece | null } };
+  enableMovementValidation: boolean;
   selectingPosition?: Position;
 };
 
@@ -22,6 +23,7 @@ export const initialState: State = {
   history: [initialFEN],
   historyOffset: 0,
   pieces: new Board(initialFEN).pieces,
+  enableMovementValidation: false,
   selectingPosition: undefined,
 };
 
@@ -43,7 +45,11 @@ export const boardSlice = createSlice({
       if (state.selectingPosition) {
         const fen = state.history[state.historyOffset];
         const board = new Board(fen);
-        board.movePiece(state.selectingPosition, position);
+        board.movePiece(
+          state.selectingPosition,
+          position,
+          state.enableMovementValidation
+        );
 
         state.history.push(board.toFEN());
         state.historyOffset += 1;
