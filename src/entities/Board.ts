@@ -41,7 +41,7 @@ export class Board {
     column[position.rank] = piece;
   }
 
-  movePiece(from: Position, destination: Position) {
+  movePiece(from: Position, destination: Position, validate = true) {
     const pieceOnTheFrom = this.pieces[from.file][from.rank];
     if (pieceOnTheFrom === null) {
       throw new Error('a piece is not on the specified from position.');
@@ -63,6 +63,7 @@ export class Board {
       .movablePositionsFrom(from)
       .map((p) => p.toString());
     if (
+      validate &&
       !attackablePositionStrings.includes(destination.toString()) &&
       !movablePositionStrings.includes(destination.toString())
     ) {
