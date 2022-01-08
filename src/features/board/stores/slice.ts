@@ -1,20 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { parsePiecePlacement } from '@/utils/fen';
 import { File, Rank } from '@/types';
-import { Board, Piece } from '@/entities';
+import { Board, Piece, Position } from '@/entities';
 
 const initialFEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR';
-
-// TODO: ファクトリクラス化を検討
-const createBoard = (fen: string) => {
-  const board = new Board();
-  parsePiecePlacement(fen).map((tuple) => {
-    const [position, piece] = tuple;
-    board.put(position, piece);
-  });
-  return board;
-};
 
 export type State = {
   frameHexColor: string;
@@ -23,6 +12,7 @@ export type State = {
   history: string[];
   historyOffset: number;
   pieces: { [k in File]: { [k in Rank]: Piece | null } };
+  selectingPosition?: Position;
 };
 
 export const initialState: State = {
@@ -31,13 +21,37 @@ export const initialState: State = {
   blackSquareHexColor: '#555',
   history: [initialFEN],
   historyOffset: 0,
-  pieces: createBoard(initialFEN).pieces,
+  pieces: new Board(initialFEN).pieces,
+  selectingPosition: undefined,
 };
 
 export const boardSlice = createSlice({
   name: 'board',
   initialState,
-  reducers: {},
+  reducers: {
+    resetPositionSelection(state) {
+      state.selectingPosition = undefined;
+      return state;
+    },
+    selectPosition(state, action: PayloadAction<{ position: Position }>) {
+      const { position } = action.payload;
+
+      if (state.selectingPosition) {
+        const fen = state.history[state.historyOffset];
+        const board = new Board(fen);
+        board.movePiece(state.selectingPosition, position);
+
+        state.history.push(board.toFEN());
+        state.historyOffset += 1;
+        state.pieces = board.pieces;
+        state.selectingPosition = undefined;
+        return state;
+      } else {
+        state.selectingPosition = position;
+        return state;
+      }
+    },
+  },
 });
 
 export const actions = boardSlice.actions;
