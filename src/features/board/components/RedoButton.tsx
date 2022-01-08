@@ -2,26 +2,22 @@ import React from 'react';
 import styled from 'styled-components';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useDispatch } from 'react-redux';
 
-import { boardSlice } from '../stores/slice';
-import { RootState, useSelector } from '@/stores/store';
-
-const selector = ({ board }: RootState) => ({
-  history: board.history,
-  historyOffset: board.historyOffset,
-});
+import { boardStore } from '@/features/board/stores';
+import { useAppDispatch } from '@/stores/store';
+import { useSelector } from '@/stores/store';
 
 export const RedoButton: React.FC = () => {
-  const { history, historyOffset } = useSelector(selector);
+  const dispatch = useAppDispatch();
+
+  const { history, historyOffset } = useSelector((state) => state.board);
   const redoable = history.length > historyOffset + 1;
 
-  const dispatch = useDispatch();
   const handleClick = () => {
     if (!redoable) {
       return false;
     }
-    dispatch(boardSlice.actions.redoMovePiece());
+    dispatch(boardStore.actions.redoMovePiece());
   };
 
   return (
