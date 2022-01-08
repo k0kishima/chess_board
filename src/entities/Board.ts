@@ -1,4 +1,5 @@
 import { File, Rank, ALL_FILES, ALL_RANKS } from '@/types';
+import { parsePiecePlacement } from '@/utils/fen';
 import { Piece } from './Piece';
 import { Position } from './Position';
 
@@ -10,7 +11,7 @@ type Pieces = { [k in File]: { [k in Rank]: Piece | null } };
 export class Board {
   pieces: Pieces;
 
-  constructor() {
+  constructor(fen = '') {
     // prettier-ignore
     this.pieces = {
       a: { 1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null, 8: null },
@@ -22,6 +23,12 @@ export class Board {
       g: { 1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null, 8: null },
       h: { 1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null, 8: null },
     };
+    if (fen) {
+      parsePiecePlacement(fen).map((tuple) => {
+        const [position, piece] = tuple;
+        this.put(position, piece);
+      });
+    }
   }
 
   put(position: Position, piece: Piece) {
