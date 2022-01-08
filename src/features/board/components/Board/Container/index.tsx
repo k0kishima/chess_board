@@ -7,6 +7,7 @@ import { Piece } from '@/components/Piece';
 import { Presentation } from '../Presentation';
 import { Position } from '@/entities';
 import { Container as SquareContainer } from '../../Square/Container';
+import { Menu } from '../../Menu';
 
 const selector = ({ board }: RootState) => ({
   frameHexColor: board.frameHexColor,
@@ -34,33 +35,38 @@ export const Container: React.VFC = () => {
     const positions = Position.all().sort((a, b) => b.rank - a.rank);
 
     return (
-      <Presentation frameHexColor={frameHexColor} boardVw={BOARD_VW}>
-        {createSquaresProps(
-          BOARD_VW,
-          QUANTITY_PER_ROW,
-          whiteSquareHexColor,
-          blackSquareHexColor
-        ).map((props, i) => {
-          const position = positions[i];
-          const piece = pieces[position.file][position.rank];
+      <>
+        <Presentation frameHexColor={frameHexColor} boardVw={BOARD_VW}>
+          {createSquaresProps(
+            BOARD_VW,
+            QUANTITY_PER_ROW,
+            whiteSquareHexColor,
+            blackSquareHexColor
+          ).map((props, i) => {
+            const position = positions[i];
+            const piece = pieces[position.file][position.rank];
 
-          if (!piece) {
-            return (
-              <SquareContainer position={position}>
-                <Square {...props} key={i} />
-              </SquareContainer>
-            );
-          } else {
-            return (
-              <SquareContainer position={position}>
-                <Square {...props} key={i}>
-                  <Piece symbol={piece.toSymbol()} />
-                </Square>
-              </SquareContainer>
-            );
-          }
-        })}
-      </Presentation>
+            if (!piece) {
+              return (
+                <SquareContainer position={position}>
+                  <Square {...props} key={i} />
+                </SquareContainer>
+              );
+            } else {
+              return (
+                <SquareContainer position={position}>
+                  <Square {...props} key={i}>
+                    <Piece symbol={piece.toSymbol()} />
+                  </Square>
+                </SquareContainer>
+              );
+            }
+          })}
+        </Presentation>
+        <div>
+          <Menu />
+        </div>
+      </>
     );
   } else {
     return <></>;

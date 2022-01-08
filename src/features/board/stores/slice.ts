@@ -29,6 +29,10 @@ export const boardSlice = createSlice({
   name: 'board',
   initialState,
   reducers: {
+    reset(state) {
+      state = initialState;
+      return state;
+    },
     resetPositionSelection(state) {
       state.selectingPosition = undefined;
       return state;
