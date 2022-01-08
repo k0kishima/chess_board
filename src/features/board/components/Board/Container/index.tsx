@@ -6,6 +6,7 @@ import { Square } from '@/components/Square';
 import { Piece } from '@/components/Piece';
 import { Presentation } from '../Presentation';
 import { Position } from '@/entities';
+import { Container as SquareContainer } from '../../Square/Container';
 
 const selector = ({ board }: RootState) => ({
   frameHexColor: board.frameHexColor,
@@ -44,12 +45,18 @@ export const Container: React.VFC = () => {
           const piece = pieces[position.file][position.rank];
 
           if (!piece) {
-            return <Square {...props} key={i} />;
+            return (
+              <SquareContainer position={position}>
+                <Square {...props} key={i} />
+              </SquareContainer>
+            );
           } else {
             return (
-              <Square {...props} key={i}>
-                <Piece symbol={piece.toSymbol()} />
-              </Square>
+              <SquareContainer position={position}>
+                <Square {...props} key={i}>
+                  <Piece symbol={piece.toSymbol()} />
+                </Square>
+              </SquareContainer>
             );
           }
         })}
