@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import { Position } from '@/entities';
-import { boardSlice } from '../../../stores/slice';
+import { boardSlice } from '@/features/board/stores/slice';
 
 type Props = {
   children?: React.ReactNode;
