@@ -55,6 +55,20 @@ export const boardSlice = createSlice({
         return state;
       }
     },
+    undoMovePiece: (state) => {
+      state.historyOffset -= 1;
+      const fen = state.history[state.historyOffset];
+      const board = new Board(fen);
+      state.pieces = board.pieces;
+      return state;
+    },
+    redoMovePiece: (state) => {
+      state.historyOffset += 1;
+      const fen = state.history[state.historyOffset];
+      const board = new Board(fen);
+      state.pieces = board.pieces;
+      return state;
+    },
   },
 });
 
