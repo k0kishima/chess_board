@@ -2,15 +2,15 @@ import React from 'react';
 import styled from 'styled-components';
 import { faRedo } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useDispatch } from 'react-redux';
 
-import { boardSlice } from '../stores/slice';
+import { boardStore } from '@/features/board/stores';
+import { useAppDispatch } from '@/stores/store';
 
 export const ResetButton: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const handleClick = () => {
     if (window.confirm('Are you sure?')) {
-      dispatch(boardSlice.actions.reset());
+      dispatch(boardStore.actions.reset());
     }
   };
 

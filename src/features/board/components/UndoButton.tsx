@@ -1,26 +1,23 @@
 import React from 'react';
 import styled from 'styled-components';
-import { RootState, useSelector } from '@/stores/store';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useDispatch } from 'react-redux';
 
-import { boardSlice } from '../stores/slice';
-
-const selector = ({ board }: RootState) => ({
-  historyOffset: board.historyOffset,
-});
+import { boardStore } from '@/features/board/stores';
+import { useAppDispatch } from '@/stores/store';
+import { useSelector } from '@/stores/store';
 
 export const UndoButton: React.FC = () => {
-  const { historyOffset } = useSelector(selector);
+  const dispatch = useAppDispatch();
+
+  const { historyOffset } = useSelector((state) => state.board);
   const undoable = historyOffset > 0;
 
-  const dispatch = useDispatch();
   const handleClick = () => {
     if (!undoable) {
       return false;
     }
-    dispatch(boardSlice.actions.undoMovePiece());
+    dispatch(boardStore.actions.undoMovePiece());
   };
 
   return (

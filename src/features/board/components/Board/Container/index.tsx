@@ -3,20 +3,13 @@ import { useState, useEffect } from 'react';
 import { Piece, Square } from '@/components';
 import { Position } from '@/entities';
 import { Menu, SquareContainer } from '@/features/board/components';
-import { RootState, useSelector } from '@/stores/store';
+import { useSelector } from '@/stores/store';
 import { createSquaresProps } from '@/utils/squares';
 import { Presentation } from '../Presentation';
 
-const selector = ({ board }: RootState) => ({
-  frameHexColor: board.frameHexColor,
-  whiteSquareHexColor: board.whiteSquareHexColor,
-  blackSquareHexColor: board.blackSquareHexColor,
-  pieces: board.pieces,
-});
-
 export const Container: React.VFC = () => {
   const { frameHexColor, whiteSquareHexColor, blackSquareHexColor, pieces } =
-    useSelector(selector);
+    useSelector((state) => state.board);
 
   const [height, setHeight] = useState<number>(0);
   const [width, setWidth] = useState<number>(0);

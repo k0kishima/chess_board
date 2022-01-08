@@ -1,8 +1,8 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
 
 import { Position } from '@/entities';
-import { boardSlice } from '@/features/board/stores/slice';
+import { boardStore } from '@/features/board/stores';
+import { useAppDispatch } from '@/stores/store';
 
 type Props = {
   children?: React.ReactNode;
@@ -10,13 +10,13 @@ type Props = {
 };
 
 export const Container: React.VFC<Props> = ({ children, position }: Props) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleClick: (event: React.MouseEvent<HTMLElement>) => void = (_) => {
     try {
-      dispatch(boardSlice.actions.selectPosition({ position: position }));
+      dispatch(boardStore.actions.selectPosition({ position: position }));
     } catch (error) {
-      dispatch(boardSlice.actions.resetPositionSelection());
+      dispatch(boardStore.actions.resetPositionSelection());
       alert(error);
     }
   };
