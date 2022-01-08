@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react';
 
+import { Piece, Square } from '@/components';
+import { Position } from '@/entities';
+import { Menu, SquareContainer } from '@/features/board/components';
 import { RootState, useSelector } from '@/stores/store';
 import { createSquaresProps } from '@/utils/squares';
-import { Square } from '@/components/Square';
-import { Piece } from '@/components/Piece';
 import { Presentation } from '../Presentation';
-import { Position } from '@/entities';
-import { Container as SquareContainer } from '../../Square/Container';
-import { Menu } from '../../Menu';
 
 const selector = ({ board }: RootState) => ({
   frameHexColor: board.frameHexColor,

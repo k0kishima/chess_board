@@ -1,1 +1,2 @@
-export { Container as BoardContainer } from './components/Board/Container';
+export { BoardContainer } from './components';
+export { boardStore } from './stores';

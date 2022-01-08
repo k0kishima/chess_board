@@ -1,8 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { RedoButton } from './RedoButton';
-import { ResetButton } from './ResetButton';
-import { UndoButton } from './UndoButton';
+
+import {
+  RedoButton,
+  ResetButton,
+  UndoButton,
+} from '@/features/board/components';
 
 export const Menu: React.FC = () => {
   return (
