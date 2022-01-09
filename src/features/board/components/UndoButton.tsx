@@ -10,8 +10,8 @@ import { useSelector } from '@/stores/store';
 export const UndoButton: React.FC = () => {
   const dispatch = useAppDispatch();
 
-  const { historyOffset } = useSelector((state) => state.board);
-  const undoable = historyOffset > 0;
+  const { game } = useSelector((state) => state.board);
+  const undoable = game.historyOffset > 0;
 
   const handleClick = () => {
     if (!undoable) {

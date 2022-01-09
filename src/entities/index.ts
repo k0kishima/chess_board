@@ -1,3 +1,4 @@
+export { Game } from './Game';
 export { Board } from './Board';
 export { Bishop } from './Bishop';
 export { King } from './King';
