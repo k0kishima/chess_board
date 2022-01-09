@@ -1,4 +1,5 @@
-import { Color, FEN } from '@/types';
+import { Board, Piece, Position } from '@/entities';
+import { Color, FEN, File, Rank } from '@/types';
 import { parseActiveColor } from '@/utils/fen';
 
 export const INITIAL_FEN =
@@ -13,25 +14,24 @@ export class Game {
     this._historyOffset = 0;
   }
 
-  set historyOffset(offset: number) {
-    this._historyOffset = offset;
+  pieces(): { [k in File]: { [k in Rank]: Piece | null } } {
+    return new Board(this.currentNoation()).pieces;
   }
 
-  get historyOffset() {
-    return this._historyOffset;
-  }
-
-  historyLength(): number {
-    return this._history.length;
-  }
-
-  pushHistory(fen: FEN) {
-    this._history = [...this._history.slice(this._historyOffset - 1), fen];
-    this._historyOffset += 1;
+  movePiece(from: Position, to: Position) {
+    const board = new Board(this.currentNoation());
+    board.movePiece(from, to, false);
+    this._history = [
+      ...this._history.slice(0, this._historyOffset + 1),
+      // TODO: FENのビルダーを実装する
+      `${board.toFEN()} ${this.nextActiveColorSymbol()}`,
+    ];
+    this._historyOffset = this._history.length - 1;
+    return true;
   }
 
   currentNoation(): FEN {
-    return this._history[this.historyOffset];
+    return this._history[this._historyOffset];
   }
 
   currentActiveColor(): Color {
@@ -48,5 +48,29 @@ export class Game {
 
   nextActiveColorSymbol(): 'w' | 'b' {
     return this.currentActiveColor() == 'White' ? 'b' : 'w';
+  }
+
+  undoable(): boolean {
+    return this._historyOffset > 0;
+  }
+
+  undo() {
+    if (this.undoable()) {
+      this._historyOffset -= 1;
+      return true;
+    }
+    throw new Error('Cannot undo.');
+  }
+
+  redoable(): boolean {
+    return this._historyOffset < this._history.length - 1;
+  }
+
+  redo() {
+    if (this.redoable()) {
+      this._historyOffset += 1;
+      return true;
+    }
+    throw new Error('Cannot redo.');
   }
 }

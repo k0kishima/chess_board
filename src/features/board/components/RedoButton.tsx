@@ -12,10 +12,9 @@ export const RedoButton: React.FC = () => {
 
   // TODO: デメテルの法則を遵守したい
   const { game } = useSelector((state) => state.board);
-  const redoable = game.historyLength() > game.historyOffset + 1;
 
   const handleClick = () => {
-    if (!redoable) {
+    if (!game.redoable()) {
       return false;
     }
     dispatch(boardStore.actions.redoMovePiece());
@@ -25,7 +24,7 @@ export const RedoButton: React.FC = () => {
     <Styled onClick={handleClick}>
       <FontAwesomeIcon
         icon={faArrowRight}
-        className={redoable ? '' : 'fa-disabled'}
+        className={game.redoable() ? '' : 'fa-disabled'}
       />
     </Styled>
   );
