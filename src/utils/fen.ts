@@ -87,3 +87,22 @@ export const parsePiecePlacement = (fen: string): [Position, Piece][] => {
 
   return positionAndPieces;
 };
+
+export const parseActiveColor = (fen: string): Color => {
+  const [, extensionPart] = fen.split(' ');
+  if (!extensionPart) {
+    throw new Error('Given FEN may not have extension part.');
+  }
+  const [colorSymbol] = extensionPart.split(' ');
+  if (typeof colorSymbol === 'string') {
+    console.log('color symbol', colorSymbol);
+    switch (colorSymbol) {
+      case 'w':
+        return 'White';
+      case 'b':
+        return 'Black';
+      default:
+    }
+  }
+  throw new Error('The color symbol is invalid format.');
+};

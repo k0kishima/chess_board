@@ -2,6 +2,7 @@ import {
   createPieceColorFromSymbol,
   createPieceFromSymbol,
   parsePiecePlacement,
+  parseActiveColor,
 } from '../fen';
 import { King, Pawn, Position } from '@/entities';
 
@@ -41,6 +42,44 @@ describe('FEN utils', () => {
         expect(() => {
           parsePiecePlacement(
             'anbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2'
+          );
+        }).toThrow();
+      });
+    });
+  });
+
+  describe('parseActiveColor', () => {
+    describe('parse a valid format FEN', () => {
+      describe('parse a symbol describing white', () => {
+        it('should returns tuples of position and piece', () => {
+          expect(
+            parseActiveColor(
+              'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+            )
+          ).toEqual('White');
+        });
+      });
+
+      describe('parse a symbol describing black', () => {
+        it('should returns tuples of position and piece', () => {
+          expect(
+            parseActiveColor(
+              'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1'
+            )
+          ).toEqual('Black');
+        });
+      });
+    });
+
+    describe('parse a invalid format FEN', () => {
+      it('should throws an error', () => {
+        expect(() => {
+          parseActiveColor('rnbqkbnr/pp1ppppp/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R');
+        }).toThrow();
+
+        expect(() => {
+          parseActiveColor(
+            'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR W KQkq - 0 1'
           );
         }).toThrow();
       });
