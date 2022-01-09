@@ -39,29 +39,30 @@ export const boardSlice = createSlice({
     },
     selectPosition(state, action: PayloadAction<{ position: Position }>) {
       const { position } = action.payload;
-      const board = new Board(state.game.currentNoation());
 
       if (state.selectingPosition) {
-        board.movePiece(
-          state.selectingPosition,
-          position,
-          state.enableMovementValidation
-        );
-        // TODO: FENのビルダーを実装する
-        state.game.pushHistory(
-          `${board.toFEN()} ${state.game.nextActiveColorSymbol()}`
-        );
-        state.pieces = board.pieces;
-        state.selectingPosition = undefined;
-        return state;
-      } else {
-        const piece = board.pieces[position.file][position.rank];
-        if (piece && piece.color == state.game.currentActiveColor()) {
-          state.selectingPosition = position;
-          return state;
-        }
         return state;
       }
+
+      const board = new Board(state.game.currentNoation());
+      const piece = board.pieces[position.file][position.rank];
+      if (piece && piece.color == state.game.currentActiveColor()) {
+        state.selectingPosition = position;
+        return state;
+      }
+      return state;
+    },
+    movePiece(state, action: PayloadAction<{ from: Position; to: Position }>) {
+      const { from, to } = action.payload;
+      const board = new Board(state.game.currentNoation());
+      board.movePiece(from, to, state.enableMovementValidation);
+      // TODO: FENのビルダーを実装する
+      state.game.pushHistory(
+        `${board.toFEN()} ${state.game.nextActiveColorSymbol()}`
+      );
+      state.pieces = board.pieces;
+      state.selectingPosition = undefined;
+      return state;
     },
     undoMovePiece: (state) => {
       state.game.historyOffset -= 1;
