@@ -13,6 +13,7 @@ import {
   ALL_RANKS,
   ALL_WHITE_PIECE_SYMBOLS_OF_FEN,
   Color,
+  FEN,
   PieceSymbolOfFEN,
 } from '@/types';
 
@@ -52,7 +53,7 @@ export const createPieceFromSymbol = (pieceSymbol: PieceSymbolOfFEN): Piece => {
   }
 };
 
-export const parsePiecePlacement = (fen: string): [Position, Piece][] => {
+export const parsePiecePlacement = (fen: FEN): [Position, Piece][] => {
   const [piecePlacement] = fen.split(' ');
   const ranks = piecePlacement.split('/');
   const allFiles = [...ALL_FILES];
@@ -88,7 +89,7 @@ export const parsePiecePlacement = (fen: string): [Position, Piece][] => {
   return positionAndPieces;
 };
 
-export const parseActiveColor = (fen: string): Color => {
+export const parseActiveColor = (fen: FEN): Color => {
   const [, extensionPart] = fen.split(' ');
   if (!extensionPart) {
     throw new Error('Given FEN may not have extension part.');

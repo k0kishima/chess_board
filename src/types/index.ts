@@ -1,5 +1,7 @@
 export type Color = 'White' | 'Black';
 
+export type FEN = string;
+
 export const ALL_FILES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] as const;
 export type File = typeof ALL_FILES[number];
 

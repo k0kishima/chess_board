@@ -1,4 +1,4 @@
-import { File, Rank, ALL_FILES, ALL_RANKS } from '@/types';
+import { FEN, File, Rank, ALL_FILES, ALL_RANKS } from '@/types';
 import { parsePiecePlacement } from '@/utils/fen';
 import { Piece } from './Piece';
 import { Position } from './Position';
@@ -11,7 +11,7 @@ type Pieces = { [k in File]: { [k in Rank]: Piece | null } };
 export class Board {
   pieces: Pieces;
 
-  constructor(fen = '') {
+  constructor(fen: FEN = '') {
     // prettier-ignore
     this.pieces = {
       a: { 1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null, 8: null },
