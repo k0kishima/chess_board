@@ -5,12 +5,14 @@ type Props = {
   children?: React.ReactNode;
   hexColorCode: string; // todo: Color パッケージを使う
   sideLengthByViewPort: number;
+  isSelecting?: boolean;
 };
 
 export const Square: React.VFC<Props> = ({
   children,
   hexColorCode,
   sideLengthByViewPort,
+  isSelecting,
 }: Props) => {
   const Styled = styled.div`
     background-color: ${hexColorCode};
@@ -24,7 +26,15 @@ export const Square: React.VFC<Props> = ({
     img {
       width: 100%;
     }
+
+    .selecting {
+      opacity: 0.6;
+    }
   `;
 
-  return <Styled>{children}</Styled>;
+  return (
+    <Styled>
+      <div className={isSelecting ? 'selecting' : ''}>{children}</div>
+    </Styled>
+  );
 };

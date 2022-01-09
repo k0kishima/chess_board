@@ -48,3 +48,19 @@ export const blackSquareWithBlackPiece: React.VFC = () => {
     </Square>
   );
 };
+
+export const selectingWhiteSquareWithBlackPiece: React.VFC = () => {
+  return (
+    <Square hexColorCode='#eee' sideLengthByViewPort={10} isSelecting={true}>
+      <Piece symbol='k' />
+    </Square>
+  );
+};
+
+export const selectingBlackSquareWithBlackPiece: React.VFC = () => {
+  return (
+    <Square hexColorCode='#333' sideLengthByViewPort={10} isSelecting={true}>
+      <Piece symbol='q' />
+    </Square>
+  );
+};

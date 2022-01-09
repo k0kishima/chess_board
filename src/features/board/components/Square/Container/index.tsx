@@ -12,7 +12,7 @@ type Props = {
 export const Container: React.VFC<Props> = ({ children, position }: Props) => {
   const dispatch = useAppDispatch();
 
-  const handleClick: (event: React.MouseEvent<HTMLElement>) => void = (_) => {
+  const handleClick: (event: React.MouseEvent<HTMLElement>) => void = () => {
     try {
       dispatch(boardStore.actions.selectPosition({ position: position }));
     } catch (error) {
