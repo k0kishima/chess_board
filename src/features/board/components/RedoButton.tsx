@@ -10,8 +10,9 @@ import { useSelector } from '@/stores/store';
 export const RedoButton: React.FC = () => {
   const dispatch = useAppDispatch();
 
-  const { history, historyOffset } = useSelector((state) => state.board);
-  const redoable = history.length > historyOffset + 1;
+  // TODO: デメテルの法則を遵守したい
+  const { game } = useSelector((state) => state.board);
+  const redoable = game.historyLength() > game.historyOffset + 1;
 
   const handleClick = () => {
     if (!redoable) {

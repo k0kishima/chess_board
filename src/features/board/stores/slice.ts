@@ -1,32 +1,28 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { Color, File, Rank } from '@/types';
-import { Board, Piece, Position } from '@/entities';
+import { File, Rank } from '@/types';
+import { Board, Game, Piece, Position } from '@/entities';
 
-const initialFEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+const game = new Game();
 
 export type State = {
   frameHexColor: string;
   whiteSquareHexColor: string;
   blackSquareHexColor: string;
-  history: string[];
-  historyOffset: number;
+  game: Game;
   pieces: { [k in File]: { [k in Rank]: Piece | null } };
   enableMovementValidation: boolean;
   selectingPosition?: Position;
-  activeColor: Color;
 };
 
 export const initialState: State = {
   frameHexColor: '#333',
   whiteSquareHexColor: '#eee',
   blackSquareHexColor: '#555',
-  history: [initialFEN],
-  historyOffset: 0,
-  pieces: new Board(initialFEN).pieces,
+  game: game,
+  pieces: new Board(game.currentNoation()).pieces,
   enableMovementValidation: false,
   selectingPosition: undefined,
-  activeColor: 'White',
 };
 
 export const boardSlice = createSlice({
@@ -43,8 +39,7 @@ export const boardSlice = createSlice({
     },
     selectPosition(state, action: PayloadAction<{ position: Position }>) {
       const { position } = action.payload;
-      const fen = state.history[state.historyOffset];
-      const board = new Board(fen);
+      const board = new Board(state.game.currentNoation());
 
       if (state.selectingPosition) {
         board.movePiece(
@@ -52,15 +47,16 @@ export const boardSlice = createSlice({
           position,
           state.enableMovementValidation
         );
-        state.history.push(board.toFEN());
-        state.historyOffset += 1;
+        // TODO: FENのビルダーを実装する
+        state.game.pushHistory(
+          `${board.toFEN()} ${state.game.nextActiveColorSymbol()}`
+        );
         state.pieces = board.pieces;
         state.selectingPosition = undefined;
-        state.activeColor = state.activeColor == 'White' ? 'Black' : 'White';
         return state;
       } else {
         const piece = board.pieces[position.file][position.rank];
-        if (piece && piece.color == state.activeColor) {
+        if (piece && piece.color == state.game.currentActiveColor()) {
           state.selectingPosition = position;
           return state;
         }
@@ -68,19 +64,15 @@ export const boardSlice = createSlice({
       }
     },
     undoMovePiece: (state) => {
-      state.historyOffset -= 1;
-      const fen = state.history[state.historyOffset];
-      const board = new Board(fen);
+      state.game.historyOffset -= 1;
+      const board = new Board(state.game.currentNoation());
       state.pieces = board.pieces;
-      state.activeColor = state.activeColor == 'White' ? 'Black' : 'White';
       return state;
     },
     redoMovePiece: (state) => {
-      state.historyOffset += 1;
-      const fen = state.history[state.historyOffset];
-      const board = new Board(fen);
+      state.game.historyOffset += 1;
+      const board = new Board(state.game.currentNoation());
       state.pieces = board.pieces;
-      state.activeColor = state.activeColor == 'White' ? 'Black' : 'White';
       return state;
     },
   },
