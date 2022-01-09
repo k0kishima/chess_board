@@ -8,8 +8,13 @@ import { createSquaresProps } from '@/utils/squares';
 import { Presentation } from '../Presentation';
 
 export const Container: React.VFC = () => {
-  const { frameHexColor, whiteSquareHexColor, blackSquareHexColor, pieces } =
-    useSelector((state) => state.board);
+  const {
+    frameHexColor,
+    whiteSquareHexColor,
+    blackSquareHexColor,
+    pieces,
+    selectingPosition,
+  } = useSelector((state) => state.board);
 
   const [height, setHeight] = useState<number>(0);
   const [width, setWidth] = useState<number>(0);
@@ -44,9 +49,11 @@ export const Container: React.VFC = () => {
                 </SquareContainer>
               );
             } else {
+              const isSelecting =
+                position.toString() === selectingPosition?.toString();
               return (
                 <SquareContainer position={position}>
-                  <Square {...props} key={i}>
+                  <Square {...props} isSelecting={isSelecting} key={i}>
                     <Piece symbol={piece.toSymbol()} />
                   </Square>
                 </SquareContainer>
