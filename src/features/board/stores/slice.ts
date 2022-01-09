@@ -72,6 +72,7 @@ export const boardSlice = createSlice({
       const fen = state.history[state.historyOffset];
       const board = new Board(fen);
       state.pieces = board.pieces;
+      state.activeColor = state.activeColor == 'White' ? 'Black' : 'White';
       return state;
     },
     redoMovePiece: (state) => {
@@ -79,6 +80,7 @@ export const boardSlice = createSlice({
       const fen = state.history[state.historyOffset];
       const board = new Board(fen);
       state.pieces = board.pieces;
+      state.activeColor = state.activeColor == 'White' ? 'Black' : 'White';
       return state;
     },
   },
