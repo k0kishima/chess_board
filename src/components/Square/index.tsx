@@ -14,27 +14,29 @@ export const Square: React.VFC<Props> = ({
   sideLengthByViewPort,
   isSelecting,
 }: Props) => {
-  const Styled = styled.div`
-    background-color: ${hexColorCode};
-    width: ${sideLengthByViewPort}vw;
-    height: ${sideLengthByViewPort}vw;
-
-    div {
-      transform: translate(0, 0);
-    }
-
-    img {
-      width: 100%;
-    }
-
-    .selecting {
-      opacity: 0.6;
-    }
-  `;
-
   return (
-    <Styled>
+    <Styled
+      style={{
+        backgroundColor: hexColorCode,
+        width: `${sideLengthByViewPort}vw`,
+        height: `${sideLengthByViewPort}vw`,
+      }}
+    >
       <div className={isSelecting ? 'selecting' : ''}>{children}</div>
     </Styled>
   );
 };
+
+const Styled = styled.div`
+  div {
+    transform: translate(0, 0);
+  }
+
+  img {
+    width: 100%;
+  }
+
+  .selecting {
+    opacity: 0.6;
+  }
+`;

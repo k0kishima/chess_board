@@ -10,11 +10,11 @@ import { useSelector } from '@/stores/store';
 export const UndoButton: React.FC = () => {
   const dispatch = useAppDispatch();
 
+  // TODO: デメテルの法則を遵守したい
   const { game } = useSelector((state) => state.board);
-  const undoable = game.historyOffset > 0;
 
   const handleClick = () => {
-    if (!undoable) {
+    if (!game.undoable()) {
       return false;
     }
     dispatch(boardStore.actions.undoMovePiece());
@@ -24,7 +24,7 @@ export const UndoButton: React.FC = () => {
     <Styled onClick={handleClick}>
       <FontAwesomeIcon
         icon={faArrowLeft}
-        className={undoable ? '' : 'fa-disabled'}
+        className={game.undoable() ? '' : 'fa-disabled'}
       />
     </Styled>
   );

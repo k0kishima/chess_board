@@ -12,7 +12,7 @@ export const Container: React.VFC = () => {
     frameHexColor,
     whiteSquareHexColor,
     blackSquareHexColor,
-    pieces,
+    game,
     selectingPosition,
   } = useSelector((state) => state.board);
 
@@ -29,6 +29,7 @@ export const Container: React.VFC = () => {
     const QUANTITY_PER_ROW = 8;
 
     const positions = Position.all().sort((a, b) => b.rank - a.rank);
+    const pieces = game.pieces();
 
     return (
       <>
@@ -44,7 +45,7 @@ export const Container: React.VFC = () => {
 
             if (!piece) {
               return (
-                <SquareContainer position={position}>
+                <SquareContainer position={position} key={i}>
                   <Square {...props} key={i} />
                 </SquareContainer>
               );
@@ -52,7 +53,7 @@ export const Container: React.VFC = () => {
               const isSelecting =
                 position.toString() === selectingPosition?.toString();
               return (
-                <SquareContainer position={position}>
+                <SquareContainer position={position} key={i}>
                   <Square {...props} isSelecting={isSelecting} key={i}>
                     <Piece symbol={piece.toSymbol()} />
                   </Square>
