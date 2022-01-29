@@ -14,8 +14,14 @@ import {
   ALL_WHITE_PIECE_SYMBOLS_OF_FEN,
   Color,
   FEN,
+  File,
   PieceSymbolOfFEN,
+  Rank,
 } from '@/types';
+
+const INDEX_AT_EXTENSION_PART = {
+  EN_PASSANTABLE_POSITION: 2,
+} as const;
 
 export const createPieceColorFromSymbol = (
   pieceSymbol: PieceSymbolOfFEN
@@ -90,13 +96,9 @@ export const parsePiecePlacement = (fen: FEN): [Position, Piece][] => {
 };
 
 export const parseActiveColor = (fen: FEN): Color => {
-  const [, extensionPart] = fen.split(' ');
-  if (!extensionPart) {
-    throw new Error('Given FEN may not have extension part.');
-  }
-  const [colorSymbol] = extensionPart.split(' ');
+  const extensionParts = parseExtensionParts(fen);
+  const [colorSymbol] = extensionParts;
   if (typeof colorSymbol === 'string') {
-    console.log('color symbol', colorSymbol);
     switch (colorSymbol) {
       case 'w':
         return 'White';
@@ -106,4 +108,27 @@ export const parseActiveColor = (fen: FEN): Color => {
     }
   }
   throw new Error('The color symbol is invalid format.');
+};
+
+export const parseEnPassantablePosition = (fen: FEN): Position | null => {
+  const extensionParts = parseExtensionParts(fen);
+  const positionString =
+    extensionParts[INDEX_AT_EXTENSION_PART.EN_PASSANTABLE_POSITION];
+  if (positionString === '-') {
+    return null;
+  }
+  const [file, rank] = positionString.split('');
+  // TODO: 型をちゃんと絞る
+  // これだと file が 'z' とか rank が 9 とかでもエラーにならない
+  // typeof だと プリミティブな型でしか絞れない
+  // 通常の用途でそういったものが混入することはないので劣後するが対応自体は行う
+  return new Position(file as File, parseInt(rank) as Rank);
+};
+
+const parseExtensionParts = (fen: FEN): string[] => {
+  const [, ...extensionPart] = fen.split(' ');
+  if (!extensionPart) {
+    throw new Error('Given FEN may not have extension part.');
+  }
+  return extensionPart;
 };
