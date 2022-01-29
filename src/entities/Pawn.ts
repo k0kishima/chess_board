@@ -10,8 +10,19 @@ export class Pawn extends Piece {
     this.validatePosition(currentPosition);
 
     try {
-      const nextRank = this.nextRank(currentPosition.rank);
-      return [new Position(currentPosition.file, nextRank)];
+      let positions = [
+        new Position(currentPosition.file, this.nextRank(currentPosition.rank)),
+      ];
+      if (
+        (currentPosition.rank === 2 && this.color === 'White') ||
+        (currentPosition.rank === 7 && this.color === 'Black')
+      ) {
+        positions = [
+          ...positions,
+          new Position(currentPosition.file, this.color === 'White' ? 4 : 5),
+        ];
+      }
+      return positions;
     } catch {
       // TODO: CannotRankupAnyMore 以外の場合の制御を考えて実装する
       return [];
