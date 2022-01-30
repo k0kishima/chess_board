@@ -38,7 +38,7 @@ export class FENBuilder {
     this._activeColor = color;
   }
 
-  addEnPassantablePosition(position: Position) {
+  addEnPassantablePosition(position: Position | null) {
     this._enPassantablePosition = position;
   }
 

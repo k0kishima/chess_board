@@ -21,11 +21,17 @@ export class Game {
 
   movePiece(from: Position, to: Position) {
     const board = new Board(this.currentNoation());
+    // FIXME
+    // Borad#movePiece の前に呼び出さなければいけないとか順序関係を持ってしまっているのが最悪
+    const enPassantablePosition = board.getEnPassantablePositionFromMove(
+      from,
+      to
+    );
     board.movePiece(from, to);
     this._history = [
       ...this._history.slice(0, this._historyOffset + 1),
       // TODO: FENのビルダーを実装する
-      this.currentFEN(board),
+      this.createFEN(board, enPassantablePosition),
     ];
     this._historyOffset = this._history.length - 1;
     return true;
@@ -67,10 +73,11 @@ export class Game {
     throw new Error('Cannot redo.');
   }
 
-  currentFEN(board: Board) {
+  createFEN(board: Board, enPassantablePosition: Position | null) {
     const builder = new FENBuilder();
     builder.addPiecePart(board);
     builder.addActiveColor(this.nextActiveColor());
+    builder.addEnPassantablePosition(enPassantablePosition);
     return builder.FEN();
   }
 }
