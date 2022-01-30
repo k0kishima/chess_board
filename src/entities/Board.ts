@@ -45,31 +45,13 @@ export class Board {
 
   movePiece(from: Position, destination: Position): PieceMoveResult {
     try {
-      const pieceOnTheFrom = this._getPieceAt(from);
-
-      this._checkFriendlyFire(from, destination);
-
-      const attackablePositionStrings = pieceOnTheFrom
-        .attackablePositionsFrom(from)
-        .map((p) => p.toString());
-      const movablePositionStrings = pieceOnTheFrom
-        .movablePositionsFrom(from)
-        .map((p) => p.toString());
-
-      if (
-        !attackablePositionStrings.includes(destination.toString()) &&
-        !movablePositionStrings.includes(destination.toString())
-      ) {
-        throw new Error(
-          `${pieceOnTheFrom.toSymbol()} cannot move or attack to ${destination.toString()} from ${from.toString()}.`
-        );
+      const pieceOnTheDestination =
+        this.pieces[destination.file][destination.rank];
+      if (pieceOnTheDestination) {
+        this._regularPieceAttack(from, destination);
+      } else {
+        this._regularPieceMove(from, destination);
       }
-
-      // FIXME:
-      // 攻撃可能なマスに敵がいなくても移動できてしまう可能性があるので運用しながらデバッグする
-      // 移動可能なマス即ち攻撃も可能なマスみたいな駒だといいけど、例えばポーンなんかはそうではないのでそういったケースだとバグ
-      this.pieces[from.file][from.rank] = null;
-      this.pieces[destination.file][destination.rank] = pieceOnTheFrom;
 
       return { success: true };
     } catch (e) {
@@ -120,6 +102,62 @@ export class Board {
     ) {
       throw new Error('a same color piece is on the specified destination.');
     }
+    return true;
+  }
+
+  _regularPieceMove(from: Position, destination: Position) {
+    const pieceOnTheFrom = this._getPieceAt(from);
+
+    const pieceOnTheDestination =
+      this.pieces[destination.file][destination.rank];
+    if (pieceOnTheDestination) {
+      throw new Error(
+        `${pieceOnTheFrom.toSymbol()} cannot move to ${destination.toString()} from ${from.toString()} because already other piece is in the position.`
+      );
+    }
+
+    // TODO: 途中に駒がある場合の考慮を追加
+    const movablePositionStrings = pieceOnTheFrom
+      .movablePositionsFrom(from)
+      .map((p) => p.toString());
+    if (!movablePositionStrings.includes(destination.toString())) {
+      throw new Error(
+        `${pieceOnTheFrom.toSymbol()} cannot move to ${destination.toString()} from ${from.toString()}.`
+      );
+    }
+
+    this.pieces[from.file][from.rank] = null;
+    this.pieces[destination.file][destination.rank] = pieceOnTheFrom;
+
+    return true;
+  }
+
+  _regularPieceAttack(from: Position, destination: Position) {
+    this._checkFriendlyFire(from, destination);
+
+    const pieceOnTheFrom = this._getPieceAt(from);
+    const pieceOnTheDestination =
+      this.pieces[destination.file][destination.rank];
+
+    if (!pieceOnTheDestination) {
+      throw new Error(
+        `${pieceOnTheFrom.toSymbol()} cannot attack to ${destination.toString()} from ${from.toString()} because any piece is not in the position.`
+      );
+    }
+
+    // TODO: 途中に駒がある場合の考慮を追加
+    const attackablePositionStrings = pieceOnTheFrom
+      .attackablePositionsFrom(from)
+      .map((p) => p.toString());
+    if (!attackablePositionStrings.includes(destination.toString())) {
+      throw new Error(
+        `${pieceOnTheFrom.toSymbol()} cannot attach to ${destination.toString()} from ${from.toString()}.`
+      );
+    }
+
+    this.pieces[from.file][from.rank] = null;
+    this.pieces[destination.file][destination.rank] = pieceOnTheFrom;
+
     return true;
   }
 }
