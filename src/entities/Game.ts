@@ -39,16 +39,8 @@ export class Game {
     return parseActiveColor(this.currentNoation());
   }
 
-  currentActiveColorSymbol(): 'w' | 'b' {
-    return this.currentActiveColor() == 'White' ? 'w' : 'b';
-  }
-
   nextActiveColor(): Color {
     return this.currentActiveColor() == 'White' ? 'Black' : 'White';
-  }
-
-  nextActiveColorSymbol(): 'w' | 'b' {
-    return this.currentActiveColor() == 'White' ? 'b' : 'w';
   }
 
   undoable(): boolean {
@@ -78,7 +70,7 @@ export class Game {
   currentFEN(board: Board) {
     const builder = new FENBuilder();
     builder.addPiecePart(board);
-    builder.addActiveColor(this.nextActiveColorSymbol());
+    builder.addActiveColor(this.nextActiveColor());
     return builder.FEN();
   }
 }

@@ -1,31 +1,45 @@
-import { FEN, File, Rank, ALL_FILES, ALL_RANKS } from '@/types';
+import { Color, FEN, File, Rank, ALL_FILES, ALL_RANKS } from '@/types';
 import { Board, Position } from '@/entities';
 
 export class FENBuilder {
   _piecePart: string | null;
-  _activeColorPart: 'w' | 'b' | null;
+  _activeColor: Color | null;
+  _enPassantablePosition: Position | null;
 
   constructor() {
     this._piecePart = null;
-    this._activeColorPart = null;
+    this._activeColor = null;
+    this._enPassantablePosition = null;
   }
 
   FEN(): FEN {
     if (!this._piecePart) {
       throw new Error('Piece part have not parsed.');
     }
-    if (!this._activeColorPart) {
+    if (!this._activeColor) {
       throw new Error('Piece part have not parsed.');
     }
-    return [this._piecePart, this._activeColorPart].join(' ');
+    // TODO: キャスリングのパートを実装する
+    return [
+      this._piecePart,
+      this._activeColor == 'White' ? 'w' : 'b',
+      '-',
+      this._enPassantablePosition
+        ? this._enPassantablePosition.toString()
+        : '-',
+    ].join(' ');
   }
 
   addPiecePart(board: Board) {
     this._piecePart = this._parseBoard(board);
   }
 
-  addActiveColor(color: 'w' | 'b') {
-    this._activeColorPart = color;
+  addActiveColor(color: Color) {
+    this._activeColor = color;
+  }
+
+  addEnPassantablePosition(position: Position) {
+    this._enPassantablePosition = position;
   }
 
   _parseBoard(board: Board) {
