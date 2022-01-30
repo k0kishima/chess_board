@@ -1,4 +1,4 @@
-import { FEN, File, Rank, ALL_FILES, ALL_RANKS } from '@/types';
+import { FEN, File, Rank } from '@/types';
 import { parsePiecePlacement } from '@/utils/fen';
 import { Piece } from './Piece';
 import { Position } from './Position';
@@ -77,38 +77,5 @@ export class Board {
     // 移動可能なマス即ち攻撃も可能なマスみたいな駒だといいけど、例えばポーンなんかはそうではないのでそういったケースだとバグ
     this.pieces[from.file][from.rank] = null;
     this.pieces[destination.file][destination.rank] = pieceOnTheFrom;
-  }
-
-  toFEN() {
-    const reversedAllRanks = [...ALL_RANKS].reverse();
-    const allFiles = [...ALL_FILES];
-
-    return reversedAllRanks
-      .map((rank: Rank) => {
-        const piecesOfRanks = allFiles.map((file: File) => {
-          return this.pieces[file][rank];
-        });
-
-        const chars: (string | number)[] = [];
-        let blank = 0;
-        piecesOfRanks.map((piece) => {
-          if (piece) {
-            if (blank > 0) {
-              chars.push(blank);
-              blank = 0;
-            }
-            chars.push(piece.toSymbol());
-          } else {
-            blank++;
-          }
-        });
-
-        if (blank > 0) {
-          chars.push(blank);
-        }
-
-        return chars.join('');
-      })
-      .join('/');
   }
 }

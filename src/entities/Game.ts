@@ -1,6 +1,7 @@
 import { Board, Piece, Position } from '@/entities';
 import { Color, FEN, File, Rank } from '@/types';
 import { parseActiveColor } from '@/utils/fen';
+import { FENBuilder } from '@/utils/FENBuilder';
 
 export const INITIAL_FEN =
   'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -20,11 +21,11 @@ export class Game {
 
   movePiece(from: Position, to: Position) {
     const board = new Board(this.currentNoation());
-    board.movePiece(from, to, false);
+    board.movePiece(from, to);
     this._history = [
       ...this._history.slice(0, this._historyOffset + 1),
       // TODO: FENのビルダーを実装する
-      `${board.toFEN()} ${this.nextActiveColorSymbol()}`,
+      this.currentFEN(board),
     ];
     this._historyOffset = this._history.length - 1;
     return true;
@@ -72,5 +73,12 @@ export class Game {
       return true;
     }
     throw new Error('Cannot redo.');
+  }
+
+  currentFEN(board: Board) {
+    const builder = new FENBuilder();
+    builder.addPiecePart(board);
+    builder.addActiveColor(this.nextActiveColorSymbol());
+    return builder.FEN();
   }
 }
