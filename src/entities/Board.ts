@@ -1,4 +1,4 @@
-import { FEN, File, Rank } from '@/types';
+import { FEN, File, PieceMoveResult, Rank } from '@/types';
 import { parsePiecePlacement } from '@/utils/fen';
 import { Pawn } from './Pawn';
 import { Piece } from './Piece';
@@ -42,7 +42,11 @@ export class Board {
     column[position.rank] = piece;
   }
 
-  movePiece(from: Position, destination: Position, validate = true) {
+  movePiece(
+    from: Position,
+    destination: Position,
+    validate = true
+  ): PieceMoveResult {
     const pieceOnTheFrom = this.pieces[from.file][from.rank];
     if (pieceOnTheFrom === null) {
       throw new Error('a piece is not on the specified from position.');
@@ -78,6 +82,8 @@ export class Board {
     // 移動可能なマス即ち攻撃も可能なマスみたいな駒だといいけど、例えばポーンなんかはそうではないのでそういったケースだとバグ
     this.pieces[from.file][from.rank] = null;
     this.pieces[destination.file][destination.rank] = pieceOnTheFrom;
+
+    return { isSuccess: true };
   }
 
   // NOTE:
