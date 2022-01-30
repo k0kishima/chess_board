@@ -43,48 +43,41 @@ export class Board {
     column[position.rank] = piece;
   }
 
-  movePiece(
-    from: Position,
-    destination: Position,
-    validate = true
-  ): PieceMoveResult {
-    const pieceOnTheFrom = this.pieces[from.file][from.rank];
-    if (pieceOnTheFrom === null) {
-      throw new Error('a piece is not on the specified from position.');
+  movePiece(from: Position, destination: Position): PieceMoveResult {
+    try {
+      const pieceOnTheFrom = this._getPieceAt(from);
+
+      this._checkFriendlyFire(from, destination);
+
+      const attackablePositionStrings = pieceOnTheFrom
+        .attackablePositionsFrom(from)
+        .map((p) => p.toString());
+      const movablePositionStrings = pieceOnTheFrom
+        .movablePositionsFrom(from)
+        .map((p) => p.toString());
+
+      if (
+        !attackablePositionStrings.includes(destination.toString()) &&
+        !movablePositionStrings.includes(destination.toString())
+      ) {
+        throw new Error(
+          `${pieceOnTheFrom.toSymbol()} cannot move or attack to ${destination.toString()} from ${from.toString()}.`
+        );
+      }
+
+      // FIXME:
+      // 攻撃可能なマスに敵がいなくても移動できてしまう可能性があるので運用しながらデバッグする
+      // 移動可能なマス即ち攻撃も可能なマスみたいな駒だといいけど、例えばポーンなんかはそうではないのでそういったケースだとバグ
+      this.pieces[from.file][from.rank] = null;
+      this.pieces[destination.file][destination.rank] = pieceOnTheFrom;
+
+      return { success: true };
+    } catch (e) {
+      if (e instanceof Error) {
+        return { success: false, errorMessage: e.message };
+      }
+      throw e;
     }
-
-    const pieceOnTheDestination =
-      this.pieces[destination.file][destination.rank];
-    if (
-      pieceOnTheDestination &&
-      pieceOnTheFrom.color === pieceOnTheDestination.color
-    ) {
-      throw new Error('a same color piece is on the specified destination.');
-    }
-
-    const attackablePositionStrings = pieceOnTheFrom
-      .attackablePositionsFrom(from)
-      .map((p) => p.toString());
-    const movablePositionStrings = pieceOnTheFrom
-      .movablePositionsFrom(from)
-      .map((p) => p.toString());
-    if (
-      validate &&
-      !attackablePositionStrings.includes(destination.toString()) &&
-      !movablePositionStrings.includes(destination.toString())
-    ) {
-      throw new Error(
-        `${pieceOnTheFrom.toSymbol()} cannot move or attack to ${destination.toString()} from ${from.toString()}.`
-      );
-    }
-
-    // FIXME:
-    // 攻撃可能なマスに敵がいなくても移動できてしまう可能性があるので運用しながらデバッグする
-    // 移動可能なマス即ち攻撃も可能なマスみたいな駒だといいけど、例えばポーンなんかはそうではないのでそういったケースだとバグ
-    this.pieces[from.file][from.rank] = null;
-    this.pieces[destination.file][destination.rank] = pieceOnTheFrom;
-
-    return { isSuccess: true };
   }
 
   // NOTE:
@@ -106,5 +99,27 @@ export class Board {
     } else {
       return from.rank == 7 && to.rank == 5 ? new Position(from.file, 6) : null;
     }
+  }
+
+  _getPieceAt(position: Position): Piece {
+    const piece = this.pieces[position.file][position.rank];
+    if (piece === null) {
+      throw new Error('a piece is not on the specified from position.');
+    }
+    return piece;
+  }
+
+  _checkFriendlyFire(from: Position, destination: Position) {
+    const pieceOnTheFrom = this.pieces[from.file][from.rank];
+    const pieceOnTheDestination =
+      this.pieces[destination.file][destination.rank];
+    if (
+      pieceOnTheFrom &&
+      pieceOnTheDestination &&
+      pieceOnTheFrom.color === pieceOnTheDestination.color
+    ) {
+      throw new Error('a same color piece is on the specified destination.');
+    }
+    return true;
   }
 }

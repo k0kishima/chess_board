@@ -27,13 +27,18 @@ export class Game {
       from,
       to
     );
-    board.movePiece(from, to);
-    this._history = [
-      ...this._history.slice(0, this._historyOffset + 1),
-      // TODO: FENのビルダーを実装する
-      this.createFEN(board, enPassantablePosition),
-    ];
-    this._historyOffset = this._history.length - 1;
+    const result = board.movePiece(from, to);
+    if (result.success) {
+      this._history = [
+        ...this._history.slice(0, this._historyOffset + 1),
+        // TODO: FENのビルダーを実装する
+        this.createFEN(board, enPassantablePosition),
+      ];
+      this._historyOffset = this._history.length - 1;
+    } else {
+      console.log(result.errorMessage);
+    }
+
     return true;
   }
 

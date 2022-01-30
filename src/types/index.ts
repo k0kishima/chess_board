@@ -33,7 +33,7 @@ export const ALL_PIECE_SYMBOLS_OF_FEN = [
 export type PieceSymbolOfFEN = typeof ALL_PIECE_SYMBOLS_OF_FEN[number];
 
 export type PieceMoveResult = {
-  isSuccess: boolean;
+  success: boolean;
   errorMessage?: string;
   enPassantablePosition?: Position;
 };
