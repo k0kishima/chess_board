@@ -1,5 +1,5 @@
 import { FEN, File, PieceMoveResult, Rank } from '@/types';
-import { parsePiecePlacement } from '@/utils/fen';
+import { FENParser } from '@/utils/FENParser';
 import { Pawn } from './Pawn';
 import { Piece } from './Piece';
 import { Position } from './Position';
@@ -25,7 +25,8 @@ export class Board {
       h: { 1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null, 8: null },
     };
     if (fen) {
-      parsePiecePlacement(fen).map((tuple) => {
+      const parser = new FENParser(fen);
+      parser.parsePiecePlacement().map((tuple) => {
         const [position, piece] = tuple;
         this.put(position, piece);
       });

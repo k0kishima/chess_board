@@ -1,7 +1,7 @@
 import { Board, Piece, Position } from '@/entities';
 import { Color, FEN, File, Rank } from '@/types';
-import { parseActiveColor } from '@/utils/fen';
 import { FENBuilder } from '@/utils/FENBuilder';
+import { FENParser } from '@/utils/FENParser';
 
 export const INITIAL_FEN =
   'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -42,7 +42,8 @@ export class Game {
   }
 
   currentActiveColor(): Color {
-    return parseActiveColor(this.currentNoation());
+    const parser = new FENParser(this.currentNoation());
+    return parser.parseActiveColor();
   }
 
   nextActiveColor(): Color {
