@@ -1,5 +1,5 @@
 import { FENParser } from '../FENParser';
-import { King, Pawn, Position, Rook } from '@/entities';
+import { King, Pawn, Position } from '@/entities';
 
 describe('FENParser', () => {
   describe('#parsePiecePlacement', () => {
@@ -78,26 +78,33 @@ describe('FENParser', () => {
         const parser = new FENParser(
           'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
         );
-        // TODO: オブジェクト同士の比較だとアサーション通らないのでその点修正する
-        xit('should returns array of tuples of position and piece', () => {
-          expect(parser.parseCastlingPosition()).toEqual([
+        it('should returns array of tuples of position and piece', () => {
+          const stringifiedResult = parser
+            .parseCastlingPosition()
+            .map((arrayOfTuple) => {
+              return arrayOfTuple.map((tuple) => {
+                return tuple.map((pieceOrPosition) =>
+                  pieceOrPosition.toString()
+                );
+              });
+            });
+          // オブジェクト同士の比較だとアサーション通らないので文字列に変換してから比較
+          expect(stringifiedResult).toEqual([
             [
-              [
-                [new King('White'), new Position('e', 1)],
-                [new Rook('White'), new Position('h', 1)],
-              ],
-              [
-                [new King('White'), new Position('e', 1)],
-                [new Rook('White'), new Position('a', 1)],
-              ],
-              [
-                [new King('Black'), new Position('e', 8)],
-                [new Rook('Black'), new Position('h', 8)],
-              ],
-              [
-                [new King('Black'), new Position('e', 8)],
-                [new Rook('Black'), new Position('a', 8)],
-              ],
+              ['K', 'e1'],
+              ['R', 'h1'],
+            ],
+            [
+              ['K', 'e1'],
+              ['R', 'a1'],
+            ],
+            [
+              ['k', 'e8'],
+              ['r', 'h8'],
+            ],
+            [
+              ['k', 'e8'],
+              ['r', 'a8'],
             ],
           ]);
         });
