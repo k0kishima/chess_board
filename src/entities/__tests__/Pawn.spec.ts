@@ -10,6 +10,7 @@ describe('Pawn', () => {
         it('should returns an array of positions', () => {
           expect(whitePawn.movablePositionsFrom(new Position('a', 2))).toEqual([
             new Position('a', 3),
+            new Position('a', 4),
           ]);
           expect(whitePawn.movablePositionsFrom(new Position('h', 7))).toEqual([
             new Position('h', 8),
@@ -47,6 +48,7 @@ describe('Pawn', () => {
           ]);
           expect(blackPawn.movablePositionsFrom(new Position('a', 7))).toEqual([
             new Position('a', 6),
+            new Position('a', 5),
           ]);
         });
       });
