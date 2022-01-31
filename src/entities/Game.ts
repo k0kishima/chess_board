@@ -21,25 +21,22 @@ export class Game {
 
   movePiece(from: Position, to: Position) {
     const board = new Board(this.currentNoation());
-    // FIXME
-    // Borad#movePiece の前に呼び出さなければいけないとか順序関係を持ってしまっているのが最悪
-    const enPassantablePosition = board.getEnPassantablePositionFromMove(
-      from,
-      to
-    );
-    const result = board.movePiece(from, to);
-    if (result.success) {
+    const result = board.movePiece(from, to, this.currentGameContext());
+
+    if (result.success && result.gameContext) {
+      const { enPassantablePosition } = result.gameContext;
+
       this._history = [
         ...this._history.slice(0, this._historyOffset + 1),
-        // TODO: FENのビルダーを実装する
         this.createFEN(board, enPassantablePosition),
       ];
       this._historyOffset = this._history.length - 1;
+
+      return true;
     } else {
       console.log(result.errorMessage);
+      return false;
     }
-
-    return true;
   }
 
   currentNoation(): FEN {
@@ -85,5 +82,12 @@ export class Game {
     builder.addActiveColor(this.nextActiveColor());
     builder.addEnPassantablePosition(enPassantablePosition);
     return builder.FEN();
+  }
+
+  currentGameContext() {
+    const parser = new FENParser(this.currentNoation());
+    return {
+      enPassantablePosition: parser.parseEnPassantablePosition(),
+    };
   }
 }

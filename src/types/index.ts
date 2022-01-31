@@ -35,5 +35,9 @@ export type PieceSymbolOfFEN = typeof ALL_PIECE_SYMBOLS_OF_FEN[number];
 export type PieceMoveResult = {
   success: boolean;
   errorMessage?: string;
-  enPassantablePosition?: Position;
+  gameContext?: GameContext;
+};
+
+export type GameContext = {
+  enPassantablePosition: Position | null;
 };

@@ -1,4 +1,4 @@
-import { FEN, File, PieceMoveResult, Rank } from '@/types';
+import { FEN, File, GameContext, PieceMoveResult, Rank } from '@/types';
 import { FENParser } from '@/utils/FENParser';
 import { Pawn } from './Pawn';
 import { Piece } from './Piece';
@@ -43,17 +43,33 @@ export class Board {
     column[position.rank] = piece;
   }
 
-  movePiece(from: Position, destination: Position): PieceMoveResult {
+  movePiece(
+    from: Position,
+    destination: Position,
+    gameContext: GameContext | null = null
+  ): PieceMoveResult {
     try {
-      const pieceOnTheDestination =
-        this.pieces[destination.file][destination.rank];
-      if (pieceOnTheDestination) {
-        this._regularPieceAttack(from, destination);
-      } else {
-        this._regularPieceMove(from, destination);
+      // TODO: 実行順序の依存を持ってしまっている（駒の配置が変わる前にこれを呼び出さないといけない）ので修正
+      const enPassantablePosition = this.getEnPassantablePositionFromMove(
+        from,
+        destination
+      );
+      if (!this._enPassant(from, destination, gameContext)) {
+        const pieceOnTheDestination =
+          this.pieces[destination.file][destination.rank];
+        if (pieceOnTheDestination) {
+          this._regularPieceAttack(from, destination);
+        } else {
+          this._regularPieceMove(from, destination);
+        }
       }
 
-      return { success: true };
+      return {
+        success: true,
+        gameContext: {
+          enPassantablePosition: enPassantablePosition,
+        },
+      };
     } catch (e) {
       if (e instanceof Error) {
         return { success: false, errorMessage: e.message };
@@ -62,9 +78,6 @@ export class Board {
     }
   }
 
-  // NOTE:
-  // これだと e2 -> e4 のとき e3 に何か駒があってもPositionを返してしまうが、
-  // そのケースは #movePiece で例外を挙げるのでここではケアしない
   getEnPassantablePositionFromMove(
     from: Position,
     to: Position
@@ -76,6 +89,7 @@ export class Board {
     if (!(piece instanceof Pawn)) {
       return null;
     }
+    // TODO: 途中に駒がある場合の考慮を追加
     if (piece.color == 'White') {
       return from.rank == 2 && to.rank == 4 ? new Position(from.file, 3) : null;
     } else {
@@ -157,6 +171,36 @@ export class Board {
 
     this.pieces[from.file][from.rank] = null;
     this.pieces[destination.file][destination.rank] = pieceOnTheFrom;
+
+    return true;
+  }
+
+  _enPassant(
+    from: Position,
+    destination: Position,
+    gameContext: GameContext | null
+  ) {
+    if (!gameContext || !gameContext.enPassantablePosition) {
+      return false;
+    }
+    const piece = this.pieces[from.file][from.rank];
+    if (!piece) {
+      return false;
+    }
+    if (!(piece instanceof Pawn)) {
+      return false;
+    }
+    if (
+      destination.toString() !== gameContext.enPassantablePosition.toString()
+    ) {
+      return false;
+    }
+
+    this.pieces[from.file][from.rank] = null;
+    this.pieces[destination.file][destination.rank] = piece;
+
+    const willBeUnpassantPieceRank = piece.color === 'White' ? 5 : 4;
+    this.pieces[destination.file][willBeUnpassantPieceRank] = null;
 
     return true;
   }
