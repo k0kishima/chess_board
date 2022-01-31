@@ -1,5 +1,5 @@
 import { FENParser } from '../FENParser';
-import { King, Pawn, Position } from '@/entities';
+import { King, Pawn, Position, Rook } from '@/entities';
 
 describe('FENParser', () => {
   describe('#parsePiecePlacement', () => {
@@ -67,6 +67,66 @@ describe('FENParser', () => {
             'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR W KQkq - 0 1'
           );
           parser.parseActiveColor();
+        }).toThrow();
+      });
+    });
+  });
+
+  describe('#parseCastlingPosition', () => {
+    describe('parse a valid format FEN', () => {
+      describe('to parse a symbol describing all castling enable', () => {
+        const parser = new FENParser(
+          'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+        );
+        // TODO: オブジェクト同士の比較だとアサーション通らないのでその点修正する
+        xit('should returns array of tuples of position and piece', () => {
+          expect(parser.parseCastlingPosition()).toEqual([
+            [
+              [
+                [new King('White'), new Position('e', 1)],
+                [new Rook('White'), new Position('h', 1)],
+              ],
+              [
+                [new King('White'), new Position('e', 1)],
+                [new Rook('White'), new Position('a', 1)],
+              ],
+              [
+                [new King('Black'), new Position('e', 8)],
+                [new Rook('Black'), new Position('h', 8)],
+              ],
+              [
+                [new King('Black'), new Position('e', 8)],
+                [new Rook('Black'), new Position('a', 8)],
+              ],
+            ],
+          ]);
+        });
+      });
+
+      describe('to parse a symbol describing any castlings not enable', () => {
+        const parser = new FENParser(
+          'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b - e3 0 1'
+        );
+        it('should returns empty array', () => {
+          expect(parser.parseCastlingPosition()).toEqual([]);
+        });
+      });
+    });
+
+    describe('parse a invalid format FEN', () => {
+      it('should throws an error', () => {
+        expect(() => {
+          const parser = new FENParser(
+            'rnbqkbnr/pp1ppppp/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R'
+          );
+          parser.parseCastlingPosition();
+        }).toThrow();
+
+        expect(() => {
+          const parser = new FENParser(
+            'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w zzz - 0 1'
+          );
+          parser.parseCastlingPosition();
         }).toThrow();
       });
     });

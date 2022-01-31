@@ -20,6 +20,7 @@ import {
 } from '@/types';
 
 const INDEX_AT_EXTENSION_PART = {
+  CASTLINGABLE_POSITION: 1,
   EN_PASSANTABLE_POSITION: 2,
 } as const;
 
@@ -79,6 +80,41 @@ export class FENParser {
       }
     }
     throw new Error('The color symbol is invalid format.');
+  }
+
+  parseCastlingPosition(): [[King, Position], [Rook, Position]][] {
+    const extensionParts = this._parseExtensionParts();
+    const symbols =
+      extensionParts[INDEX_AT_EXTENSION_PART.CASTLINGABLE_POSITION];
+    if (symbols === '-') {
+      return [];
+    }
+    return symbols.split('').map((symbol) => {
+      switch (symbol) {
+        case 'K':
+          return [
+            [new King('White'), new Position('e', 1)],
+            [new Rook('White'), new Position('h', 1)],
+          ];
+        case 'Q':
+          return [
+            [new King('White'), new Position('e', 1)],
+            [new Rook('White'), new Position('a', 1)],
+          ];
+        case 'k':
+          return [
+            [new King('Black'), new Position('e', 8)],
+            [new Rook('Black'), new Position('h', 8)],
+          ];
+        case 'q':
+          return [
+            [new King('Black'), new Position('e', 8)],
+            [new Rook('Black'), new Position('a', 8)],
+          ];
+        default:
+          throw new Error('The castlingable symbol is invalid format.');
+      }
+    });
   }
 
   parseEnPassantablePosition(): Position | null {
