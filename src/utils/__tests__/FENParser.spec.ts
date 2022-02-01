@@ -79,34 +79,25 @@ describe('FENParser', () => {
           'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
         );
         it('should returns array of tuples of position and piece', () => {
-          const stringifiedResult = parser
-            .parseCastlingPosition()
-            .map((arrayOfTuple) => {
-              return arrayOfTuple.map((tuple) => {
-                return tuple.map((pieceOrPosition) =>
-                  pieceOrPosition.toString()
-                );
-              });
-            });
-          // オブジェクト同士の比較だとアサーション通らないので文字列に変換してから比較
-          expect(stringifiedResult).toEqual([
-            [
-              ['K', 'e1'],
-              ['R', 'h1'],
-            ],
-            [
-              ['K', 'e1'],
-              ['R', 'a1'],
-            ],
-            [
-              ['k', 'e8'],
-              ['r', 'h8'],
-            ],
-            [
-              ['k', 'e8'],
-              ['r', 'a8'],
-            ],
-          ]);
+          // オブジェクト同士の比較だとアサーション通らないので文字列に変換されたものを比較
+          expect(parser.parseCastlingPosition()).toEqual({
+            b1: {
+              destination: { file: 'c', rank: 1 },
+              from: { file: 'a', rank: 1 },
+            },
+            b8: {
+              destination: { file: 'c', rank: 8 },
+              from: { file: 'a', rank: 8 },
+            },
+            g1: {
+              destination: { file: 'f', rank: 1 },
+              from: { file: 'h', rank: 1 },
+            },
+            g8: {
+              destination: { file: 'g', rank: 8 },
+              from: { file: 'h', rank: 8 },
+            },
+          });
         });
       });
 
@@ -115,7 +106,7 @@ describe('FENParser', () => {
           'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b - e3 0 1'
         );
         it('should returns empty array', () => {
-          expect(parser.parseCastlingPosition()).toEqual([]);
+          expect(parser.parseCastlingPosition()).toEqual({});
         });
       });
     });

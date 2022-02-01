@@ -12,6 +12,7 @@ import {
   ALL_FILES,
   ALL_RANKS,
   ALL_WHITE_PIECE_SYMBOLS_OF_FEN,
+  castlingMovement,
   Color,
   FEN,
   File,
@@ -82,39 +83,47 @@ export class FENParser {
     throw new Error('The color symbol is invalid format.');
   }
 
-  parseCastlingPosition(): [[King, Position], [Rook, Position]][] {
+  parseCastlingPosition(): castlingMovement {
     const extensionParts = this._parseExtensionParts();
     const symbols =
       extensionParts[INDEX_AT_EXTENSION_PART.CASTLINGABLE_POSITION];
     if (symbols === '-') {
-      return [];
+      return {};
     }
-    return symbols.split('').map((symbol) => {
+
+    const castlingMovement: castlingMovement = {};
+    symbols.split('').forEach((symbol) => {
       switch (symbol) {
         case 'K':
-          return [
-            [new King('White'), new Position('e', 1)],
-            [new Rook('White'), new Position('h', 1)],
-          ];
+          castlingMovement[String(new Position('g', 1))] = {
+            from: new Position('h', 1),
+            destination: new Position('f', 1),
+          };
+          break;
         case 'Q':
-          return [
-            [new King('White'), new Position('e', 1)],
-            [new Rook('White'), new Position('a', 1)],
-          ];
+          castlingMovement[String(new Position('b', 1))] = {
+            from: new Position('a', 1),
+            destination: new Position('c', 1),
+          };
+          break;
         case 'k':
-          return [
-            [new King('Black'), new Position('e', 8)],
-            [new Rook('Black'), new Position('h', 8)],
-          ];
+          castlingMovement[String(new Position('g', 8))] = {
+            from: new Position('h', 8),
+            destination: new Position('g', 8),
+          };
+          break;
         case 'q':
-          return [
-            [new King('Black'), new Position('e', 8)],
-            [new Rook('Black'), new Position('a', 8)],
-          ];
+          castlingMovement[String(new Position('b', 8))] = {
+            from: new Position('a', 8),
+            destination: new Position('c', 8),
+          };
+          break;
         default:
           throw new Error('The castlingable symbol is invalid format.');
       }
     });
+
+    return castlingMovement;
   }
 
   parseEnPassantablePosition(): Position | null {

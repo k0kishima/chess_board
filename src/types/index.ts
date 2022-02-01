@@ -1,4 +1,4 @@
-import { Position } from '@/entities';
+import { King, Position, Rook } from '@/entities';
 
 export type Color = 'White' | 'Black';
 
@@ -40,4 +40,9 @@ export type PieceMoveResult = {
 
 export type GameContext = {
   enPassantablePosition: Position | null;
+  castlingablePieces: castlingMovement;
 };
+
+type KingDestination = string;
+type RookMovement = { from: Position; destination: Position };
+export type castlingMovement = { [key: KingDestination]: RookMovement };
