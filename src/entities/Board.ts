@@ -1,8 +1,6 @@
 import { FEN, File, GameContext, PieceMoveResult, Rank } from '@/types';
 import { FENParser } from '@/utils/FENParser';
-import { Pawn } from './Pawn';
-import { Piece } from './Piece';
-import { Position } from './Position';
+import { King, Pawn, Piece, Position } from './';
 
 // NOTE:
 // 本当はPositionかFileとRankのタプルをキーとしたPieceの配列でフラットに保持したいが、
@@ -54,7 +52,10 @@ export class Board {
         from,
         destination
       );
-      if (!this._enPassant(from, destination, gameContext)) {
+      if (
+        !this._enPassant(from, destination, gameContext) &&
+        !this._castling(from, destination, gameContext)
+      ) {
         const pieceOnTheDestination =
           this.pieces[destination.file][destination.rank];
         if (pieceOnTheDestination) {
@@ -68,6 +69,7 @@ export class Board {
         success: true,
         gameContext: {
           enPassantablePosition: enPassantablePosition,
+          castlingablePieces: {},
         },
       };
     } catch (e) {
@@ -201,6 +203,39 @@ export class Board {
 
     const willBeUnpassantPieceRank = piece.color === 'White' ? 5 : 4;
     this.pieces[destination.file][willBeUnpassantPieceRank] = null;
+
+    return true;
+  }
+
+  _castling(
+    from: Position,
+    destination: Position,
+    gameContext: GameContext | null
+  ) {
+    if (!gameContext || !gameContext.castlingablePieces) {
+      return false;
+    }
+
+    const king = this.pieces[from.file][from.rank];
+    if (!king) {
+      return false;
+    }
+    if (!(king instanceof King)) {
+      return false;
+    }
+
+    const RookMovement = gameContext.castlingablePieces[destination.toString()];
+    if (!RookMovement) {
+      return false;
+    }
+
+    this.pieces[from.file][from.rank] = null;
+    this.pieces[destination.file][destination.rank] = king;
+
+    const rook = this.pieces[RookMovement.from.file][RookMovement.from.rank];
+    this.pieces[RookMovement.from.file][RookMovement.from.rank] = null;
+    this.pieces[RookMovement.destination.file][RookMovement.destination.rank] =
+      rook;
 
     return true;
   }

@@ -1,5 +1,5 @@
 import { Board, Piece, Position } from '@/entities';
-import { Color, FEN, File, Rank } from '@/types';
+import { Color, FEN, File, GameContext, Rank } from '@/types';
 import { FENBuilder } from '@/utils/FENBuilder';
 import { FENParser } from '@/utils/FENParser';
 
@@ -84,10 +84,11 @@ export class Game {
     return builder.FEN();
   }
 
-  currentGameContext() {
+  currentGameContext(): GameContext {
     const parser = new FENParser(this.currentNoation());
     return {
       enPassantablePosition: parser.parseEnPassantablePosition(),
+      castlingablePieces: parser.parseCastlingPosition(),
     };
   }
 }
