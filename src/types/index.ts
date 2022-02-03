@@ -1,4 +1,4 @@
-import { King, Position, Rook } from '@/entities';
+import { Position } from '@/entities';
 
 export type Color = 'White' | 'Black';
 

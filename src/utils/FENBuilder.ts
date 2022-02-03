@@ -53,7 +53,6 @@ export class FENBuilder {
   }
 
   addCastlingableFlag(castlingablePieces: CastlingMovement) {
-    console.log('add:', castlingablePieces);
     const flags = [];
     if (castlingablePieces.b1) {
       flags.push('Q');

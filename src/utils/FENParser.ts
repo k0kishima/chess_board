@@ -109,7 +109,7 @@ export class FENParser {
         case 'k':
           castlingMovement[String(new Position('g', 8)) as KingDestination] = {
             from: new Position('h', 8),
-            destination: new Position('g', 8),
+            destination: new Position('f', 8),
           };
           break;
         case 'q':

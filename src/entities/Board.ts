@@ -1,6 +1,13 @@
-import { FEN, File, GameContext, PieceMoveResult, Rank } from '@/types';
+import {
+  FEN,
+  File,
+  GameContext,
+  KingDestination,
+  PieceMoveResult,
+  Rank,
+} from '@/types';
 import { FENParser } from '@/utils/FENParser';
-import { King, Pawn, Piece, Position } from './';
+import { King, Pawn, Piece, Position, Rook } from './';
 
 // NOTE:
 // 本当はPositionかFileとRankのタプルをキーとしたPieceの配列でフラットに保持したいが、
@@ -52,6 +59,10 @@ export class Board {
         from,
         destination
       );
+      const castlingablePieces = this._reduceCastlingablePieces(
+        from,
+        gameContext
+      );
       if (
         !this._enPassant(from, destination, gameContext) &&
         !this._castling(from, destination, gameContext)
@@ -69,7 +80,7 @@ export class Board {
         success: true,
         gameContext: {
           enPassantablePosition: enPassantablePosition,
-          castlingablePieces: {},
+          castlingablePieces: castlingablePieces,
         },
       };
     } catch (e) {
@@ -224,19 +235,58 @@ export class Board {
       return false;
     }
 
-    const RookMovement = gameContext.castlingablePieces[destination.toString()];
-    if (!RookMovement) {
+    const rookMovement =
+      gameContext.castlingablePieces[destination.toString() as KingDestination];
+    if (!rookMovement) {
       return false;
     }
 
     this.pieces[from.file][from.rank] = null;
     this.pieces[destination.file][destination.rank] = king;
 
-    const rook = this.pieces[RookMovement.from.file][RookMovement.from.rank];
-    this.pieces[RookMovement.from.file][RookMovement.from.rank] = null;
-    this.pieces[RookMovement.destination.file][RookMovement.destination.rank] =
+    const rook = this.pieces[rookMovement.from.file][rookMovement.from.rank];
+    this.pieces[rookMovement.from.file][rookMovement.from.rank] = null;
+    this.pieces[rookMovement.destination.file][rookMovement.destination.rank] =
       rook;
 
     return true;
+  }
+
+  _reduceCastlingablePieces(from: Position, gameContext: GameContext | null) {
+    if (!gameContext || !gameContext.castlingablePieces) {
+      return {};
+    }
+    const { castlingablePieces } = gameContext;
+
+    const piece = this.pieces[from.file][from.rank];
+    if (!piece) {
+      return castlingablePieces;
+    }
+    if (!(piece instanceof King) && !(piece instanceof Rook)) {
+      return castlingablePieces;
+    }
+
+    if (piece instanceof King) {
+      if (piece.color == 'White') {
+        return (({ b8, g8 }) => ({ b8, g8 }))(castlingablePieces);
+      } else {
+        return (({ b1, g1 }) => ({ b1, g1 }))(castlingablePieces);
+      }
+    }
+    if (piece instanceof Rook) {
+      //return (({ b1, b8, g1, g8 }) => ({ b1, b8, g1, g8 }))(castlingablePieces);
+      switch (from.toString()) {
+        case 'a1':
+          return (({ b8, g1, g8 }) => ({ b8, g1, g8 }))(castlingablePieces);
+        case 'a8':
+          return (({ b1, g1, g8 }) => ({ b1, g1, g8 }))(castlingablePieces);
+        case 'h1':
+          return (({ b1, b8, g8 }) => ({ b1, b8, g8 }))(castlingablePieces);
+        case 'h8':
+          return (({ b1, b8, g1 }) => ({ b1, b8, g1 }))(castlingablePieces);
+      }
+    }
+
+    return castlingablePieces;
   }
 }
