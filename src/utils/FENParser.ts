@@ -12,16 +12,17 @@ import {
   ALL_FILES,
   ALL_RANKS,
   ALL_WHITE_PIECE_SYMBOLS_OF_FEN,
-  castlingMovement,
+  CastlingMovement,
   Color,
   FEN,
   File,
+  KingDestination,
   PieceSymbolOfFEN,
   Rank,
 } from '@/types';
 
 const INDEX_AT_EXTENSION_PART = {
-  CASTLINGABLE_POSITION: 1,
+  CASTLINGABLE_FLAG: 1,
   EN_PASSANTABLE_POSITION: 2,
 } as const;
 
@@ -83,37 +84,36 @@ export class FENParser {
     throw new Error('The color symbol is invalid format.');
   }
 
-  parseCastlingPosition(): castlingMovement {
+  parseCastlingPosition(): CastlingMovement {
     const extensionParts = this._parseExtensionParts();
-    const symbols =
-      extensionParts[INDEX_AT_EXTENSION_PART.CASTLINGABLE_POSITION];
+    const symbols = extensionParts[INDEX_AT_EXTENSION_PART.CASTLINGABLE_FLAG];
     if (symbols === '-') {
       return {};
     }
 
-    const castlingMovement: castlingMovement = {};
+    const castlingMovement: CastlingMovement = {};
     symbols.split('').forEach((symbol) => {
       switch (symbol) {
         case 'K':
-          castlingMovement[String(new Position('g', 1))] = {
+          castlingMovement[String(new Position('g', 1)) as KingDestination] = {
             from: new Position('h', 1),
             destination: new Position('f', 1),
           };
           break;
         case 'Q':
-          castlingMovement[String(new Position('b', 1))] = {
+          castlingMovement[String(new Position('b', 1)) as KingDestination] = {
             from: new Position('a', 1),
             destination: new Position('c', 1),
           };
           break;
         case 'k':
-          castlingMovement[String(new Position('g', 8))] = {
+          castlingMovement[String(new Position('g', 8)) as KingDestination] = {
             from: new Position('h', 8),
             destination: new Position('g', 8),
           };
           break;
         case 'q':
-          castlingMovement[String(new Position('b', 8))] = {
+          castlingMovement[String(new Position('b', 8)) as KingDestination] = {
             from: new Position('a', 8),
             destination: new Position('c', 8),
           };
