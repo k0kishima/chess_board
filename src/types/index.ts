@@ -40,4 +40,11 @@ export type PieceMoveResult = {
 
 export type GameContext = {
   enPassantablePosition: Position | null;
+  castlingablePieces: CastlingMovement;
+};
+
+export type KingDestination = 'b1' | 'b8' | 'g1' | 'g8';
+export type RookMovement = { from: Position; destination: Position };
+export type CastlingMovement = {
+  [key in KingDestination]?: RookMovement;
 };

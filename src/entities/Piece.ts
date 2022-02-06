@@ -8,6 +8,10 @@ export abstract class Piece {
     this.color = color;
   }
 
+  toString() {
+    return this.toSymbol();
+  }
+
   abstract movablePositionsFrom(currentPosition: Position): Position[];
   abstract attackablePositionsFrom(currentPosition: Position): Position[];
   abstract toSymbol(): PieceSymbolOfFEN;

@@ -72,6 +72,64 @@ describe('FENParser', () => {
     });
   });
 
+  describe('#parseCastlingPosition', () => {
+    describe('parse a valid format FEN', () => {
+      describe('to parse a symbol describing all castling enable', () => {
+        const parser = new FENParser(
+          'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+        );
+        it('should returns array of tuples of position and piece', () => {
+          // オブジェクト同士の比較だとアサーション通らないので文字列に変換されたものを比較
+          expect(parser.parseCastlingPosition()).toEqual({
+            b1: {
+              destination: { file: 'c', rank: 1 },
+              from: { file: 'a', rank: 1 },
+            },
+            b8: {
+              destination: { file: 'c', rank: 8 },
+              from: { file: 'a', rank: 8 },
+            },
+            g1: {
+              destination: { file: 'f', rank: 1 },
+              from: { file: 'h', rank: 1 },
+            },
+            g8: {
+              destination: { file: 'g', rank: 8 },
+              from: { file: 'h', rank: 8 },
+            },
+          });
+        });
+      });
+
+      describe('to parse a symbol describing any castlings not enable', () => {
+        const parser = new FENParser(
+          'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b - e3 0 1'
+        );
+        it('should returns empty array', () => {
+          expect(parser.parseCastlingPosition()).toEqual({});
+        });
+      });
+    });
+
+    describe('parse a invalid format FEN', () => {
+      it('should throws an error', () => {
+        expect(() => {
+          const parser = new FENParser(
+            'rnbqkbnr/pp1ppppp/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R'
+          );
+          parser.parseCastlingPosition();
+        }).toThrow();
+
+        expect(() => {
+          const parser = new FENParser(
+            'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w zzz - 0 1'
+          );
+          parser.parseCastlingPosition();
+        }).toThrow();
+      });
+    });
+  });
+
   describe('#_createPieceColorFromSymbol', () => {
     const parser = new FENParser(
       'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'

@@ -1,5 +1,5 @@
 import { Board, Piece, Position } from '@/entities';
-import { Color, FEN, File, Rank } from '@/types';
+import { CastlingMovement, Color, FEN, File, GameContext, Rank } from '@/types';
 import { FENBuilder } from '@/utils/FENBuilder';
 import { FENParser } from '@/utils/FENParser';
 
@@ -24,17 +24,16 @@ export class Game {
     const result = board.movePiece(from, to, this.currentGameContext());
 
     if (result.success && result.gameContext) {
-      const { enPassantablePosition } = result.gameContext;
+      const { enPassantablePosition, castlingablePieces } = result.gameContext;
 
       this._history = [
         ...this._history.slice(0, this._historyOffset + 1),
-        this.createFEN(board, enPassantablePosition),
+        this.createFEN(board, enPassantablePosition, castlingablePieces),
       ];
       this._historyOffset = this._history.length - 1;
 
       return true;
     } else {
-      console.log(result.errorMessage);
       return false;
     }
   }
@@ -76,18 +75,24 @@ export class Game {
     throw new Error('Cannot redo.');
   }
 
-  createFEN(board: Board, enPassantablePosition: Position | null) {
+  createFEN(
+    board: Board,
+    enPassantablePosition: Position | null,
+    castlingablePieces: CastlingMovement
+  ) {
     const builder = new FENBuilder();
     builder.addPiecePart(board);
     builder.addActiveColor(this.nextActiveColor());
     builder.addEnPassantablePosition(enPassantablePosition);
+    builder.addCastlingableFlag(castlingablePieces);
     return builder.FEN();
   }
 
-  currentGameContext() {
+  currentGameContext(): GameContext {
     const parser = new FENParser(this.currentNoation());
     return {
       enPassantablePosition: parser.parseEnPassantablePosition(),
+      castlingablePieces: parser.parseCastlingPosition(),
     };
   }
 }
