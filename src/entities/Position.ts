@@ -30,6 +30,30 @@ export class Position {
     });
   }
 
+  static allFrontsFrom(offset: Position): Position[] {
+    return ALL_RANKS.filter((rank) => rank > offset.rank).map(
+      (rank) => new Position(offset.file, rank)
+    );
+  }
+
+  static allRearsFrom(offset: Position): Position[] {
+    return ALL_RANKS.filter((rank) => rank < offset.rank).map(
+      (rank) => new Position(offset.file, rank)
+    );
+  }
+
+  static allLeftsFrom(offset: Position): Position[] {
+    return ALL_FILES.filter((file) => file < offset.file).map(
+      (file) => new Position(file, offset.rank)
+    );
+  }
+
+  static allRightsFrom(offset: Position): Position[] {
+    return ALL_FILES.filter((file) => file > offset.file).map(
+      (file) => new Position(file, offset.rank)
+    );
+  }
+
   distanceFrom(other: Position) {
     return {
       rank: Math.abs(other.rank - this.rank),

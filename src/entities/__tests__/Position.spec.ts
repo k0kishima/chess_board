@@ -154,6 +154,148 @@ describe('Position', () => {
     });
   });
 
+  describe('.allFrontsFrom', () => {
+    describe('from the lowest rank', () => {
+      const offset = new Position('a', 1);
+      it('should returns tuples of position and piece', () => {
+        expect(Position.allFrontsFrom(offset)).toEqual([
+          new Position('a', 2),
+          new Position('a', 3),
+          new Position('a', 4),
+          new Position('a', 5),
+          new Position('a', 6),
+          new Position('a', 7),
+          new Position('a', 8),
+        ]);
+      });
+    });
+
+    describe('from in the middle rank', () => {
+      const offset = new Position('a', 4);
+      it('should returns tuples of position and piece', () => {
+        expect(Position.allFrontsFrom(offset)).toEqual([
+          new Position('a', 5),
+          new Position('a', 6),
+          new Position('a', 7),
+          new Position('a', 8),
+        ]);
+      });
+    });
+
+    describe('from the highest rank', () => {
+      const offset = new Position('a', 8);
+      it('should returns tuples of position and piece', () => {
+        expect(Position.allFrontsFrom(offset)).toEqual([]);
+      });
+    });
+  });
+
+  describe('.allRearsFrom', () => {
+    describe('from the lowest rank', () => {
+      const offset = new Position('a', 1);
+      it('should returns tuples of position and piece', () => {
+        expect(Position.allRearsFrom(offset)).toEqual([]);
+      });
+    });
+
+    describe('from in the middle rank', () => {
+      const offset = new Position('a', 4);
+      it('should returns tuples of position and piece', () => {
+        expect(Position.allRearsFrom(offset)).toEqual([
+          new Position('a', 1),
+          new Position('a', 2),
+          new Position('a', 3),
+        ]);
+      });
+    });
+
+    describe('from the highest rank', () => {
+      const offset = new Position('a', 8);
+      it('should returns tuples of position and piece', () => {
+        expect(Position.allRearsFrom(offset)).toEqual([
+          new Position('a', 1),
+          new Position('a', 2),
+          new Position('a', 3),
+          new Position('a', 4),
+          new Position('a', 5),
+          new Position('a', 6),
+          new Position('a', 7),
+        ]);
+      });
+    });
+  });
+
+  describe('.allLeftsFrom', () => {
+    describe('from the smallest file', () => {
+      const offset = new Position('a', 1);
+      it('should returns tuples of position and piece', () => {
+        expect(Position.allLeftsFrom(offset)).toEqual([]);
+      });
+    });
+
+    describe('from in the middle rank', () => {
+      const offset = new Position('e', 1);
+      it('should returns tuples of position and piece', () => {
+        expect(Position.allLeftsFrom(offset)).toEqual([
+          new Position('a', 1),
+          new Position('b', 1),
+          new Position('c', 1),
+          new Position('d', 1),
+        ]);
+      });
+    });
+
+    describe('from the biggest file', () => {
+      const offset = new Position('h', 1);
+      it('should returns tuples of position and piece', () => {
+        expect(Position.allLeftsFrom(offset)).toEqual([
+          new Position('a', 1),
+          new Position('b', 1),
+          new Position('c', 1),
+          new Position('d', 1),
+          new Position('e', 1),
+          new Position('f', 1),
+          new Position('g', 1),
+        ]);
+      });
+    });
+  });
+
+  describe('.allRightsFrom', () => {
+    describe('from the smallest file', () => {
+      const offset = new Position('a', 1);
+      it('should returns tuples of position and piece', () => {
+        expect(Position.allRightsFrom(offset)).toEqual([
+          new Position('b', 1),
+          new Position('c', 1),
+          new Position('d', 1),
+          new Position('e', 1),
+          new Position('f', 1),
+          new Position('g', 1),
+          new Position('h', 1),
+        ]);
+      });
+    });
+
+    describe('from in the middle rank', () => {
+      const offset = new Position('e', 1);
+      it('should returns tuples of position and piece', () => {
+        expect(Position.allRightsFrom(offset)).toEqual([
+          new Position('f', 1),
+          new Position('g', 1),
+          new Position('h', 1),
+        ]);
+      });
+    });
+
+    describe('from the biggest file', () => {
+      const offset = new Position('h', 1);
+      it('should returns tuples of position and piece', () => {
+        expect(Position.allRightsFrom(offset)).toEqual([]);
+      });
+    });
+  });
+
   describe('#distanceFrom', () => {
     it('returns distance of between positions', () => {
       const a1 = new Position('a', 1);
