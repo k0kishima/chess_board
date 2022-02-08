@@ -54,6 +54,30 @@ export class Position {
     );
   }
 
+  static allUpperRightsFrom(offset: Position): Position[] {
+    return this.allDiagonalsFrom(offset).filter(
+      (position) => position.file > offset.file && position.rank > offset.rank
+    );
+  }
+
+  static allLowerRightsFrom(offset: Position): Position[] {
+    return this.allDiagonalsFrom(offset).filter(
+      (position) => position.file > offset.file && position.rank < offset.rank
+    );
+  }
+
+  static allUpperLeftsFrom(offset: Position): Position[] {
+    return this.allDiagonalsFrom(offset).filter(
+      (position) => position.file < offset.file && position.rank > offset.rank
+    );
+  }
+
+  static allLowerLeftsFrom(offset: Position): Position[] {
+    return this.allDiagonalsFrom(offset).filter(
+      (position) => position.file < offset.file && position.rank < offset.rank
+    );
+  }
+
   distanceFrom(other: Position) {
     return {
       rank: Math.abs(other.rank - this.rank),

@@ -296,6 +296,147 @@ describe('Position', () => {
     });
   });
 
+  describe('.allUpperRightsFrom', () => {
+    describe('from the a1', () => {
+      const offset = new Position('a', 1);
+      it('should returns tuples of position and piece', () => {
+        expect(Position.allUpperRightsFrom(offset)).toEqual([
+          new Position('b', 2),
+          new Position('c', 3),
+          new Position('d', 4),
+          new Position('e', 5),
+          new Position('f', 6),
+          new Position('g', 7),
+          new Position('h', 8),
+        ]);
+      });
+    });
+
+    describe('from in the middle position', () => {
+      const offset = new Position('e', 5);
+      it('should returns tuples of position and piece', () => {
+        expect(Position.allUpperRightsFrom(offset)).toEqual([
+          new Position('f', 6),
+          new Position('g', 7),
+          new Position('h', 8),
+        ]);
+      });
+    });
+
+    describe('from the h8', () => {
+      const offset = new Position('h', 8);
+      it('should returns tuples of position and piece', () => {
+        expect(Position.allUpperRightsFrom(offset)).toEqual([]);
+      });
+    });
+  });
+
+  describe('.allLowerRightsFrom', () => {
+    describe('from the a8', () => {
+      const offset = new Position('a', 8);
+      it('should returns tuples of position and piece', () => {
+        expect(Position.allLowerRightsFrom(offset)).toEqual([
+          new Position('b', 7),
+          new Position('c', 6),
+          new Position('d', 5),
+          new Position('e', 4),
+          new Position('f', 3),
+          new Position('g', 2),
+          new Position('h', 1),
+        ]);
+      });
+    });
+
+    describe('from in the middle position', () => {
+      const offset = new Position('e', 5);
+      it('should returns tuples of position and piece', () => {
+        expect(Position.allLowerRightsFrom(offset)).toEqual([
+          new Position('f', 4),
+          new Position('g', 3),
+          new Position('h', 2),
+        ]);
+      });
+    });
+
+    describe('from the h1', () => {
+      const offset = new Position('h', 1);
+      it('should returns tuples of position and piece', () => {
+        expect(Position.allLowerRightsFrom(offset)).toEqual([]);
+      });
+    });
+  });
+
+  describe('.allUpperLeftsFrom', () => {
+    describe('from the h1', () => {
+      const offset = new Position('h', 1);
+      it('should returns tuples of position and piece', () => {
+        expect(Position.allUpperLeftsFrom(offset)).toEqual([
+          new Position('a', 8),
+          new Position('b', 7),
+          new Position('c', 6),
+          new Position('d', 5),
+          new Position('e', 4),
+          new Position('f', 3),
+          new Position('g', 2),
+        ]);
+      });
+    });
+
+    describe('from in the middle position', () => {
+      const offset = new Position('e', 5);
+      it('should returns tuples of position and piece', () => {
+        expect(Position.allUpperLeftsFrom(offset)).toEqual([
+          new Position('b', 8),
+          new Position('c', 7),
+          new Position('d', 6),
+        ]);
+      });
+    });
+
+    describe('from the a1', () => {
+      const offset = new Position('a', 1);
+      it('should returns tuples of position and piece', () => {
+        expect(Position.allUpperLeftsFrom(offset)).toEqual([]);
+      });
+    });
+  });
+
+  describe('.allLowerLeftsFrom', () => {
+    describe('from the h8', () => {
+      const offset = new Position('h', 8);
+      it('should returns tuples of position and piece', () => {
+        expect(Position.allLowerLeftsFrom(offset)).toEqual([
+          new Position('a', 1),
+          new Position('b', 2),
+          new Position('c', 3),
+          new Position('d', 4),
+          new Position('e', 5),
+          new Position('f', 6),
+          new Position('g', 7),
+        ]);
+      });
+    });
+
+    describe('from in the middle position', () => {
+      const offset = new Position('e', 5);
+      it('should returns tuples of position and piece', () => {
+        expect(Position.allLowerLeftsFrom(offset)).toEqual([
+          new Position('a', 1),
+          new Position('b', 2),
+          new Position('c', 3),
+          new Position('d', 4),
+        ]);
+      });
+    });
+
+    describe('from the a1', () => {
+      const offset = new Position('a', 1);
+      it('should returns tuples of position and piece', () => {
+        expect(Position.allLowerLeftsFrom(offset)).toEqual([]);
+      });
+    });
+  });
+
   describe('#distanceFrom', () => {
     it('returns distance of between positions', () => {
       const a1 = new Position('a', 1);
