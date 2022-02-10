@@ -43,8 +43,21 @@ export type GameContext = {
   castlingablePieces: CastlingMovement;
 };
 
+// FIX: 単に KingDestination だとキャスリングのコンテキストを持っていないから修飾すること
 export type KingDestination = 'b1' | 'b8' | 'g1' | 'g8';
 export type RookMovement = { from: Position; destination: Position };
 export type CastlingMovement = {
   [key in KingDestination]?: RookMovement;
 };
+
+export const ALL_MOVE_DIRECTIONS = [
+  '↑',
+  '↗',
+  '→',
+  '↘',
+  '↓',
+  '↙',
+  '←',
+  '↖',
+] as const;
+export type MoveDirection = typeof ALL_MOVE_DIRECTIONS[number];
