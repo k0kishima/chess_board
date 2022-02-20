@@ -24,7 +24,7 @@ export class Position {
   }
 
   static allDiagonalsFrom(offset: Position): Position[] {
-    return this.all().filter((other) => {
+    return Position.all().filter((other) => {
       const distance = offset.distanceFrom(other);
       return distance.rank > 0 && distance.rank === distance.file;
     });
@@ -55,25 +55,25 @@ export class Position {
   }
 
   static allUpperRightsFrom(offset: Position): Position[] {
-    return this.allDiagonalsFrom(offset).filter(
+    return Position.allDiagonalsFrom(offset).filter(
       (position) => position.file > offset.file && position.rank > offset.rank
     );
   }
 
   static allLowerRightsFrom(offset: Position): Position[] {
-    return this.allDiagonalsFrom(offset).filter(
+    return Position.allDiagonalsFrom(offset).filter(
       (position) => position.file > offset.file && position.rank < offset.rank
     );
   }
 
   static allUpperLeftsFrom(offset: Position): Position[] {
-    return this.allDiagonalsFrom(offset).filter(
+    return Position.allDiagonalsFrom(offset).filter(
       (position) => position.file < offset.file && position.rank > offset.rank
     );
   }
 
   static allLowerLeftsFrom(offset: Position): Position[] {
-    return this.allDiagonalsFrom(offset).filter(
+    return Position.allDiagonalsFrom(offset).filter(
       (position) => position.file < offset.file && position.rank < offset.rank
     );
   }
