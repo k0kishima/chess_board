@@ -24,10 +24,58 @@ export class Position {
   }
 
   static allDiagonalsFrom(offset: Position): Position[] {
-    return this.all().filter((other) => {
+    return Position.all().filter((other) => {
       const distance = offset.distanceFrom(other);
       return distance.rank > 0 && distance.rank === distance.file;
     });
+  }
+
+  static allFrontsFrom(offset: Position): Position[] {
+    return ALL_RANKS.filter((rank) => rank > offset.rank).map(
+      (rank) => new Position(offset.file, rank)
+    );
+  }
+
+  static allRearsFrom(offset: Position): Position[] {
+    return ALL_RANKS.filter((rank) => rank < offset.rank).map(
+      (rank) => new Position(offset.file, rank)
+    );
+  }
+
+  static allLeftsFrom(offset: Position): Position[] {
+    return ALL_FILES.filter((file) => file < offset.file).map(
+      (file) => new Position(file, offset.rank)
+    );
+  }
+
+  static allRightsFrom(offset: Position): Position[] {
+    return ALL_FILES.filter((file) => file > offset.file).map(
+      (file) => new Position(file, offset.rank)
+    );
+  }
+
+  static allUpperRightsFrom(offset: Position): Position[] {
+    return Position.allDiagonalsFrom(offset).filter(
+      (position) => position.file > offset.file && position.rank > offset.rank
+    );
+  }
+
+  static allLowerRightsFrom(offset: Position): Position[] {
+    return Position.allDiagonalsFrom(offset).filter(
+      (position) => position.file > offset.file && position.rank < offset.rank
+    );
+  }
+
+  static allUpperLeftsFrom(offset: Position): Position[] {
+    return Position.allDiagonalsFrom(offset).filter(
+      (position) => position.file < offset.file && position.rank > offset.rank
+    );
+  }
+
+  static allLowerLeftsFrom(offset: Position): Position[] {
+    return Position.allDiagonalsFrom(offset).filter(
+      (position) => position.file < offset.file && position.rank < offset.rank
+    );
   }
 
   distanceFrom(other: Position) {

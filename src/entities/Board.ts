@@ -7,6 +7,7 @@ import {
   Rank,
 } from '@/types';
 import { FENParser } from '@/utils/FENParser';
+import { PositionReducerFactory } from '@/utils/PositionReducer';
 import { King, Pawn, Piece, Position, Rook } from './';
 
 // NOTE:
@@ -91,6 +92,15 @@ export class Board {
     }
   }
 
+  reduceMovablePositions(piece: Piece, position: Position): Position[] {
+    const positionReducer = PositionReducerFactory.create(
+      this,
+      piece,
+      position
+    );
+    return positionReducer.reduce(piece.movablePositionsFrom(position));
+  }
+
   getEnPassantablePositionFromMove(
     from: Position,
     to: Position
@@ -144,9 +154,8 @@ export class Board {
     }
 
     // TODO: 途中に駒がある場合の考慮を追加
-    const movablePositionStrings = pieceOnTheFrom
-      .movablePositionsFrom(from)
-      .map((p) => p.toString());
+    const movablePositions = this.reduceMovablePositions(pieceOnTheFrom, from);
+    const movablePositionStrings = movablePositions.map((p) => p.toString());
     if (!movablePositionStrings.includes(destination.toString())) {
       throw new Error(
         `${pieceOnTheFrom.toSymbol()} cannot move to ${destination.toString()} from ${from.toString()}.`

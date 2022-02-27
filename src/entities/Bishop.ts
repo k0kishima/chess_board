@@ -1,18 +1,9 @@
-import { Piece } from './Piece';
-import { Position } from './Position';
+import { MoveDirection } from '@/types';
+import { RegularlyMovingPiece } from './Piece';
 
-export class Bishop extends Piece {
-  movablePositionsFrom(currentPosition: Position): Position[] {
-    return [Position.allDiagonalsFrom(currentPosition)]
-      .flat()
-      .filter((position) => {
-        const distance = currentPosition.distanceFrom(position);
-        return distance.file > 0 || distance.rank > 0;
-      });
-  }
-
-  attackablePositionsFrom(currentPosition: Position): Position[] {
-    return this.movablePositionsFrom(currentPosition);
+export class Bishop extends RegularlyMovingPiece {
+  moveDirections() {
+    return ['↗', '↘', '↙', '↖'] as MoveDirection[];
   }
 
   toSymbol() {
