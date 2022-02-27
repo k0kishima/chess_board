@@ -3,6 +3,15 @@ import { MoveDirection } from '@/types';
 import { movablePositionsGetterFor, reverseOf } from '@/utils/PieceMovement';
 import { PositionComparer } from '@/utils/PositionComparer';
 
+export class PositionReducerFactory {
+  static create(board: Board, piece: Piece, offset: Position) {
+    if (piece instanceof RegularlyMovingPiece) {
+      return new RegularlyMovingPiecePositionReducer(board, piece, offset);
+    }
+    return new DummyReducer(board, piece, offset);
+  }
+}
+
 abstract class PositionReducer {
   readonly board: Board;
   readonly piece: Piece;
@@ -14,14 +23,19 @@ abstract class PositionReducer {
     this.offset = offset;
   }
 
-  abstract reduce(): Position[];
+  abstract reduce(positions: Position[]): Position[];
 }
 
 export class RegularlyMovingPiecePositionReducer extends PositionReducer {
   readonly piece!: RegularlyMovingPiece;
 
-  reduce() {
-    return [];
+  reduce(positions: Position[]): Position[] {
+    const notMovablePositionStrings = this.notMovablePosition().map(
+      (position) => position.toString()
+    );
+    return positions.filter(
+      (position) => !notMovablePositionStrings.includes(position.toString())
+    );
   }
 
   notMovablePosition(): Position[] {
@@ -68,5 +82,11 @@ export class RegularlyMovingPiecePositionReducer extends PositionReducer {
       }
     }
     return null;
+  }
+}
+
+class DummyReducer extends PositionReducer {
+  reduce(positions: Position[]): Position[] {
+    return positions;
   }
 }
