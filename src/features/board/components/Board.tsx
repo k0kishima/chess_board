@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import { Board as Presentation } from '@/components';
+import { SquareList } from './SquareList';
 
 export const Container: React.VFC = () => {
   const [height, setHeight] = useState<number>(0);
@@ -12,9 +13,13 @@ export const Container: React.VFC = () => {
   }, []);
 
   if (height && width) {
-    const BOARD_VW = height / width > 1 ? 90 : 48;
+    const boardVw = height / width > 1 ? 90 : 48;
 
-    return <Presentation boardVw={BOARD_VW} frameHexColor='#000' />;
+    return (
+      <Presentation boardVw={boardVw} frameHexColor='#333'>
+        <SquareList boardVw={boardVw} />
+      </Presentation>
+    );
   } else {
     return <></>;
   }
