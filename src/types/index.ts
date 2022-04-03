@@ -1,3 +1,5 @@
+export { isFenFormatString } from './guards';
+
 export const ALL_WHITE_PIECE_SYMBOLS_OF_FEN = [
   'B',
   'K',
@@ -19,3 +21,6 @@ export const ALL_PIECE_SYMBOLS_OF_FEN = [
   ...ALL_BLACK_PIECE_SYMBOLS_OF_FEN,
 ] as const;
 export type PieceSymbolOfFEN = typeof ALL_PIECE_SYMBOLS_OF_FEN[number];
+
+declare const fenNominality: unique symbol;
+export type FenFormatString = string & { [fenNominality]: never };
