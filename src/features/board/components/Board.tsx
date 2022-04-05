@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import { Board as Presentation } from '@/components';
+import { GameProvider } from '@/contexts/game';
 import { SquareList } from './SquareList';
 
 export const Container: React.VFC = () => {
@@ -16,9 +17,11 @@ export const Container: React.VFC = () => {
     const boardVw = height / width > 1 ? 90 : 48;
 
     return (
-      <Presentation boardVw={boardVw} frameHexColor='#333'>
-        <SquareList boardVw={boardVw} />
-      </Presentation>
+      <GameProvider>
+        <Presentation boardVw={boardVw} frameHexColor='#333'>
+          <SquareList boardVw={boardVw} />
+        </Presentation>
+      </GameProvider>
     );
   } else {
     return <></>;

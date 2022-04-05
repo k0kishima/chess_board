@@ -1,5 +1,7 @@
 export { isFenFormatString } from './guards';
 
+import { File, Piece, Rank } from '@official-sashimi/chess-models';
+
 export const ALL_WHITE_PIECE_SYMBOLS_OF_FEN = [
   'B',
   'K',
@@ -24,3 +26,6 @@ export type PieceSymbolOfFEN = typeof ALL_PIECE_SYMBOLS_OF_FEN[number];
 
 declare const fenNominality: unique symbol;
 export type FenFormatString = string & { [fenNominality]: never };
+
+// eslint-disable-next-line no-unused-vars
+export type PositionedPieces = { [k in File]?: { [k in Rank]?: Piece } };
