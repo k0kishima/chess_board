@@ -1,15 +1,16 @@
 import React, { useContext } from 'react';
 import { ALL_FILES, ALL_RANKS } from '@official-sashimi/chess-models';
-import { Piece, Square } from '@/components';
 import { FenPieceSymbolFactory } from '@/utils/fen/FenPieceSymbolFactory';
 import { GameContext } from '@/contexts/game';
+import { Square } from './Square';
 
-export type Props = {
+type Props = {
   boardVw: number;
 };
 
 export const SquareList: React.VFC<Props> = ({ boardVw }: Props) => {
-  const { piecePlacement } = useContext(GameContext);
+  const { piecePlacement, selectingPosition } = useContext(GameContext);
+
   const quantityPerRow = 8;
   const whiteSquareHexColor = '#eee';
   const blackSquareHexColor = '#555';
@@ -24,26 +25,20 @@ export const SquareList: React.VFC<Props> = ({ boardVw }: Props) => {
         const piece = piecePlacement[file]?.[rank];
 
         return {
+          file: file,
+          rank: rank,
           hexColorCode:
             (x + y) % 2 === 1 ? blackSquareHexColor : whiteSquareHexColor,
           sideLengthByViewPort: squareSize,
           fenPieceSymbol: piece ? FenPieceSymbolFactory.create(piece) : null,
+          isSelecting:
+            selectingPosition?.file == file && selectingPosition?.rank == rank,
         };
       });
     })
     .flat();
 
   return propsList.map((props, i) => {
-    const { hexColorCode, sideLengthByViewPort, fenPieceSymbol } = props;
-
-    return (
-      <Square
-        hexColorCode={hexColorCode}
-        sideLengthByViewPort={sideLengthByViewPort}
-        key={i}
-      >
-        {fenPieceSymbol ? <Piece symbol={fenPieceSymbol} /> : null}
-      </Square>
-    );
+    return <Square {...props} key={i} />;
   });
 };

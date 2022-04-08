@@ -21,6 +21,8 @@ type State = {
   // The number of halfmoves since the last capture or pawn advance, used for the fifty-move rule.
   halfmoveClockNumber: number;
   numberOfTheFullmove: number;
+  selectingPosition: Position | undefined;
+  selectSquare: (position: Position) => void;
 };
 
 export const initialState: State = {
@@ -79,4 +81,8 @@ export const initialState: State = {
   enPassantablePositions: [],
   halfmoveClockNumber: 0,
   numberOfTheFullmove: 0,
+  selectingPosition: undefined,
+  selectSquare: (position) => {
+    return true;
+  },
 };
