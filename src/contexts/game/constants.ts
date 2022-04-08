@@ -1,14 +1,4 @@
-import {
-  Bishop,
-  Color,
-  King,
-  Knight,
-  Pawn,
-  Position,
-  Rook,
-  Queen,
-} from '@official-sashimi/chess-models';
-
+import { Color, Position } from '@official-sashimi/chess-models';
 import { PositionedPieces } from '@/types';
 
 type State = {
@@ -26,56 +16,7 @@ type State = {
 };
 
 export const initialState: State = {
-  piecePlacement: {
-    a: {
-      1: new Rook('White'),
-      2: new Pawn('White'),
-      7: new Pawn('Black'),
-      8: new Rook('Black'),
-    },
-    b: {
-      1: new Knight('White'),
-      2: new Pawn('White'),
-      7: new Pawn('Black'),
-      8: new Knight('Black'),
-    },
-    c: {
-      1: new Bishop('White'),
-      2: new Pawn('White'),
-      7: new Pawn('Black'),
-      8: new Bishop('Black'),
-    },
-    d: {
-      1: new Queen('White'),
-      2: new Pawn('White'),
-      7: new Pawn('Black'),
-      8: new Queen('Black'),
-    },
-    e: {
-      1: new King('White'),
-      2: new Pawn('White'),
-      7: new Pawn('Black'),
-      8: new King('Black'),
-    },
-    f: {
-      1: new Bishop('White'),
-      2: new Pawn('White'),
-      7: new Pawn('Black'),
-      8: new Bishop('Black'),
-    },
-    g: {
-      1: new Knight('White'),
-      2: new Pawn('White'),
-      7: new Pawn('Black'),
-      8: new Knight('Black'),
-    },
-    h: {
-      1: new Rook('White'),
-      2: new Pawn('White'),
-      7: new Pawn('Black'),
-      8: new Rook('Black'),
-    },
-  },
+  piecePlacement: {},
   activeColor: 'White',
   castlingablePositions: [],
   enPassantablePositions: [],
