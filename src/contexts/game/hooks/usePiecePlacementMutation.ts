@@ -10,6 +10,9 @@ import {
 } from '@official-sashimi/chess-models';
 import { PositionedPieces } from '@/types';
 import { movePiece } from './movePiece';
+import { takePiece } from './takePiece';
+
+const pieceActions = [movePiece, takePiece];
 
 export const usePiecePlacementMutation = () => {
   const [piecePlacement, setPiecePlacement] = useState<PositionedPieces>({
@@ -64,11 +67,14 @@ export const usePiecePlacementMutation = () => {
   });
 
   const mutatePiecePlacement = (from: Position, to: Position): void => {
-    try {
-      setPiecePlacement(movePiece(piecePlacement, from, to));
-    } catch (error) {
-      console.error(error);
-    }
+    pieceActions.forEach((action) => {
+      try {
+        setPiecePlacement(action(piecePlacement, from, to));
+        return;
+      } catch (error) {
+        console.error(error);
+      }
+    });
   };
 
   return { mutatePiecePlacement, piecePlacement };
