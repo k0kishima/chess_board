@@ -1,6 +1,5 @@
 import React, { createContext, useState } from 'react';
-import { Color, Position } from '@official-sashimi/chess-models';
-
+import { Color, King, Position, Queen } from '@official-sashimi/chess-models';
 import { initialState } from './constants';
 import { usePiecePlacementMutation } from './hooks/usePiecePlacementMutation';
 
@@ -9,6 +8,14 @@ export const GameContext = createContext(initialState);
 export const GameProvider: React.VFC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const [castlingableSides, setCastlingableSides] = useState<Set<King | Queen>>(
+    new Set([
+      new King('White'),
+      new Queen('White'),
+      new King('Black'),
+      new Queen('Black'),
+    ])
+  );
   const [activeColor, setActiveColor] = useState<Color>('White');
   const [selectingPosition, setSelectingPosition] = useState<
     Position | undefined
@@ -37,7 +44,14 @@ export const GameProvider: React.VFC<{ children: React.ReactNode }> = ({
       return;
     }
 
-    if (mutatePiecePlacement(selectingPosition, position)) {
+    if (
+      mutatePiecePlacement(
+        piecePlacement,
+        selectingPosition,
+        position,
+        castlingableSides
+      )
+    ) {
       toggleActiveColor();
     }
 

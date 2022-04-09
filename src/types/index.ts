@@ -1,6 +1,12 @@
+import {
+  File,
+  King,
+  Piece,
+  Position,
+  Rank,
+  Queen,
+} from '@official-sashimi/chess-models';
 export { isFenFormatString } from './guards';
-
-import { File, Piece, Rank } from '@official-sashimi/chess-models';
 
 export const ALL_WHITE_PIECE_SYMBOLS_OF_FEN = [
   'B',
@@ -29,3 +35,10 @@ export type FenFormatString = string & { [fenNominality]: never };
 
 // eslint-disable-next-line no-unused-vars
 export type PositionedPieces = { [k in File]?: { [k in Rank]?: Piece } };
+
+export type PieceAction = (
+  piecePlacement: PositionedPieces,
+  from: Position,
+  to: Position,
+  castlingableSides?: Set<King | Queen>
+) => PositionedPieces;

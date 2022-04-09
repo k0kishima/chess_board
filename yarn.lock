@@ -1819,10 +1819,10 @@
   dependencies:
     typescript "^4.6.2"
 
-"@official-sashimi/piece-action-position-factories@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@official-sashimi/piece-action-position-factories/-/piece-action-position-factories-0.1.0.tgz#dafe4b7e0e01dca7ab80f9222462ab7200f69c14"
-  integrity sha512-7tZyrfsWhGm7Qjm5FHF15P9Z+gkauhbRdCSbbwxFeqNK5qyEtKk+oIQqeTQfYAWTPKGRvoRC0vEaStdw2TPhNA==
+"@official-sashimi/piece-action-position-factories@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@official-sashimi/piece-action-position-factories/-/piece-action-position-factories-0.1.1.tgz#cf04148d4ba6fa79d65e1d3bd06cf7e246cf588c"
+  integrity sha512-nAaM/4EdSoRADK642BvfqfTv9ozcmcxWltp1Zl+8xRIsha2u3za742266273LV7/wUgomEUIdBP094TFaEn7ig==
   dependencies:
     "@official-sashimi/chess-models" "^0.2.0"
     typescript "^4.6.2"

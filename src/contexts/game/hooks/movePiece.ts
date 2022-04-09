@@ -1,12 +1,7 @@
-import { Position } from '@official-sashimi/chess-models';
 import { MovablePositionsFactory } from '@official-sashimi/piece-action-position-factories';
-import { PositionedPieces } from '@/types';
+import { PieceAction } from '@/types';
 
-export const movePiece = (
-  piecePlacement: PositionedPieces,
-  from: Position,
-  to: Position
-) => {
+export const movePiece: PieceAction = (piecePlacement, from, to) => {
   const piece = piecePlacement?.[from.file]?.[from.rank];
   if (piece == undefined) {
     throw Error('piece not found at the specified position.');
