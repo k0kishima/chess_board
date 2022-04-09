@@ -1,9 +1,8 @@
-import { Color, Position } from '@official-sashimi/chess-models';
+import { Position } from '@official-sashimi/chess-models';
 import { PositionedPieces } from '@/types';
 
 type State = {
   piecePlacement: PositionedPieces;
-  activeColor: Color;
   // TODO: キャスリング実装時に正式対応
   castlingablePositions: Position[];
   // TODO: アンパッサン実装時に正式対応
@@ -17,7 +16,6 @@ type State = {
 
 export const initialState: State = {
   piecePlacement: {},
-  activeColor: 'White',
   castlingablePositions: [],
   enPassantablePositions: [],
   halfmoveClockNumber: 0,

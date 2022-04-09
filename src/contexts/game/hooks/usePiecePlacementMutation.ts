@@ -66,15 +66,20 @@ export const usePiecePlacementMutation = () => {
     },
   });
 
-  const mutatePiecePlacement = (from: Position, to: Position): void => {
+  const mutatePiecePlacement = (from: Position, to: Position) => {
+    let isSuccess = false;
+
     pieceActions.forEach((action) => {
       try {
         setPiecePlacement(action(piecePlacement, from, to));
+        isSuccess = true;
         return;
       } catch (error) {
         console.error(error);
       }
     });
+
+    return isSuccess;
   };
 
   return { mutatePiecePlacement, piecePlacement };
