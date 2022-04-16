@@ -40,5 +40,6 @@ export type PieceAction = (
   piecePlacement: PositionedPieces,
   from: Position,
   to: Position,
-  castlingableSides?: Set<King | Queen>
+  castlingableSides?: Set<King | Queen>,
+  enPassantablePosition?: Position | undefined
 ) => PositionedPieces;
