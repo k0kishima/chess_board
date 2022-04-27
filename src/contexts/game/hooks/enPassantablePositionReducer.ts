@@ -14,13 +14,13 @@ export const enPassantablePositionReducer = (
     return undefined;
   }
 
-  // TODO: moveが成功した文脈を暗黙的に持ってしまっているので
-  if (movedPiece.color == 'White') {
-    return from.rank == 2 && to.rank == 4
+  // TODO: moveが成功した文脈を暗黙的に持ってしまっているので修正する
+  if (movedPiece.color === 'White') {
+    return from.rank === 2 && to.rank === 4
       ? new Position(from.file, 3)
       : undefined;
   } else {
-    return from.rank == 7 && to.rank == 5
+    return from.rank === 7 && to.rank === 5
       ? new Position(from.file, 6)
       : undefined;
   }

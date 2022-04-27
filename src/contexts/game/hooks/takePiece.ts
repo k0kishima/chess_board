@@ -19,9 +19,19 @@ export const takePiece: PieceAction = (piecePlacement, from, to) => {
     throw Error('the piece cannot take at specified position.');
   }
 
-  const newPiecePlacement = { ...piecePlacement };
-  delete newPiecePlacement?.[from.file]?.[from.rank];
-  newPiecePlacement?.[to.file]?.[to.rank] = piece;
+  const newPiecePlacement = {
+    ...piecePlacement,
+    [from.file]: {
+      ...piecePlacement[from.file],
+      [from.rank]: undefined,
+    },
+  };
 
-  return newPiecePlacement;
+  return {
+    ...newPiecePlacement,
+    [to.file]: {
+      ...newPiecePlacement[to.file],
+      [to.rank]: piece,
+    },
+  };
 };

@@ -154,11 +154,19 @@ const piecePlacementMurationStrategyFor = (
     to: Position,
     piecePlacement: PositionedPieces
   ) => {
-    const newPiecePlacement = { ...piecePlacement };
-    newPiecePlacement?.[to.file]?.[to.rank] =
-      newPiecePlacement[from.file]?.[from.rank];
-    newPiecePlacement?.[from.file]?.[from.rank] = null;
-    return newPiecePlacement;
+    // TODO: この場合は from.file と to.file は必ず異なるものになるのだが暗黙的にその文脈を持つべきではないので要修正
+    const piece = piecePlacement[from.file]?.[from.rank];
+    return {
+      ...piecePlacement,
+      [from.file]: {
+        ...piecePlacement[from.file],
+        [from.rank]: undefined,
+      },
+      [to.file]: {
+        ...piecePlacement[to.file],
+        [to.rank]: piece,
+      },
+    };
   };
 
   // prettier-ignore
@@ -166,30 +174,62 @@ const piecePlacementMurationStrategyFor = (
     case 'b1':
       return (from: Position, to: Position, piecePlacement: PositionedPieces) => {
         const newPiecePlacement = moveKing(from, to, piecePlacement)
-        newPiecePlacement?.['a']?.[1] = null;
-        newPiecePlacement?.['c']?.[1] = new Rook('White');
-        return newPiecePlacement
+        return {
+          ...newPiecePlacement,
+          'a': {
+            ...newPiecePlacement['a'],
+            1: undefined
+          },
+          'c': {
+            ...newPiecePlacement['c'],
+            1: new Rook('White')
+          }
+        }
       }
     case 'g1':
       return (from: Position, to: Position, piecePlacement: PositionedPieces) => {
         const newPiecePlacement = moveKing(from, to, piecePlacement)
-        newPiecePlacement?.['h']?.[1] = null;
-        newPiecePlacement?.['f']?.[1] = new Rook('White');
-        return newPiecePlacement
+        return {
+          ...newPiecePlacement,
+          'h': {
+            ...newPiecePlacement['h'],
+            1: undefined
+          },
+          'f': {
+            ...newPiecePlacement['f'],
+            1: new Rook('White')
+          }
+        }
       }
     case 'b8':
       return (from: Position, to: Position, piecePlacement: PositionedPieces) => {
         const newPiecePlacement = moveKing(from, to, piecePlacement)
-        newPiecePlacement?.['a']?.[8] = null;
-        newPiecePlacement?.['c']?.[8] = new Rook('Black');
-        return newPiecePlacement
+        return {
+          ...newPiecePlacement,
+          'a': {
+            ...newPiecePlacement['a'],
+            8: undefined
+          },
+          'c': {
+            ...newPiecePlacement['c'],
+            8: new Rook('Black')
+          }
+        }
       }
     case 'g8':
       return (from: Position, to: Position, piecePlacement: PositionedPieces) => {
         const newPiecePlacement = moveKing(from, to, piecePlacement)
-        newPiecePlacement?.['h']?.[8] = null;
-        newPiecePlacement?.['f']?.[8] = new Rook('Black');
-        return newPiecePlacement
+        return {
+          ...newPiecePlacement,
+          'h': {
+            ...newPiecePlacement['h'],
+            8: undefined
+          },
+          'f': {
+            ...newPiecePlacement['f'],
+            8: new Rook('Black')
+          }
+        }
       }
   }
 };

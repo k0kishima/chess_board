@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { Color, King, Position, Queen } from '@official-sashimi/chess-models';
 import { initialState } from './constants';
 import {
@@ -26,6 +26,9 @@ export const GameProvider: React.VFC<{ children: React.ReactNode }> = ({
   const [enPassantablePosition, setEnPassantablePosition] = useState<
     Position | undefined
   >(undefined);
+  const [lastMovedPositions, setLastMovedPositions] = useState<
+    { from: Position; to: Position } | undefined
+  >(undefined);
   const { mutatePiecePlacement, piecePlacement } = usePiecePlacementMutation();
   const toggleActiveColor = () => {
     setActiveColor(activeColor == 'White' ? 'Black' : 'White');
@@ -50,33 +53,35 @@ export const GameProvider: React.VFC<{ children: React.ReactNode }> = ({
       return;
     }
 
-    if (
-      mutatePiecePlacement(
-        piecePlacement,
-        selectingPosition,
-        position,
-        castlingableSides,
-        enPassantablePosition
-      )
-    ) {
+    const isSuccess = mutatePiecePlacement(
+      piecePlacement,
+      selectingPosition,
+      position,
+      castlingableSides,
+      enPassantablePosition
+    );
+    if (isSuccess) {
+      setLastMovedPositions({ from: selectingPosition, to: position });
       toggleActiveColor();
     }
 
+    setSelectingPosition(undefined);
+  };
+
+  useEffect(() => {
+    if (lastMovedPositions == undefined) {
+      return;
+    }
+    const { from, to } = lastMovedPositions;
+
     setCastlingableSides(
-      castlingableSidesReducer(
-        castlingableSides,
-        piecePlacement,
-        selectingPosition,
-        position
-      )
+      castlingableSidesReducer(castlingableSides, piecePlacement, from, to)
     );
 
     setEnPassantablePosition(
-      enPassantablePositionReducer(piecePlacement, selectingPosition, position)
+      enPassantablePositionReducer(piecePlacement, from, to)
     );
-
-    setSelectingPosition(undefined);
-  };
+  }, [piecePlacement]);
 
   return (
     <GameContext.Provider
