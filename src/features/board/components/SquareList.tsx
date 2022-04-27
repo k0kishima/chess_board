@@ -6,12 +6,15 @@ import { Square } from './Square';
 
 type Props = {
   boardVw: number;
+  quantityPerRow?: number;
 };
 
-export const SquareList: React.VFC<Props> = ({ boardVw }: Props) => {
+export const SquareList: React.VFC<Props> = ({
+  boardVw,
+  quantityPerRow = 8,
+}: Props) => {
   const { piecePlacement, selectingPosition } = useContext(GameContext);
 
-  const quantityPerRow = 8;
   const whiteSquareHexColor = '#eee';
   const blackSquareHexColor = '#555';
   const squareSize = boardVw / quantityPerRow;
