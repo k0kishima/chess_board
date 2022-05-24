@@ -1,9 +1,9 @@
 import type { NextPage } from 'next';
 
-import { BoardContainer } from '@/features/board';
+import { Board } from '@/features/board';
 
 const Home: NextPage = () => {
-  return <BoardContainer />;
+  return <Board />;
 };
 
 export default Home;

@@ -1,2 +1,1 @@
-export { BoardContainer } from './components';
-export { boardStore } from './stores';
+export { Container as Board } from './components/Board';
